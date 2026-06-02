@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自然の音を知る | むさび</title>
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#e3ffe7"/>
+    <text x="50" y="58" font-size="34" font-family="serif" font-weight="700" text-anchor="middle" fill="#57b38a">知</text>
+  </svg>
+</template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Zen+Kaku+Gothic+Antique:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-primary: #57b38a;
+    --green-deep: #336b33;
+    --green-mid: #4ab35d;
+    --green-soft: #e3ffe7;
+    --green-soft-2: #eef9ec;
+    --teal: #8eceC9;
+    --teal-soft: #e8f5f4;
+    --blue-teal: #4fa79b;
+    --yellow-soft: #f3f7e3;
+    --yellow-mid: #c3d974;
+    --ink: #5a5a52;
+    --shadow-cta: 0 4px 22px rgba(58,122,54,0.28);
+    --shadow-card: 0 8px 24px rgba(58,122,54,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; color: #333; scroll-behavior: smooth; }
+  body {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    width: 100%; min-width: 320px; overflow-x: hidden;
+    display: flex; flex-direction: column; align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ───── NAV (logo card + hamburger + mega menu) — same as index ───── */
+  .nav { position: fixed; top: 0; left: 0; right: 0; height: 0; z-index: 102; pointer-events: none; }
+  .nav-brand {
+    pointer-events: auto;
+    position: absolute; top: 0; left: -8px;
+    width: 273px; height: 177px;
+    display: block; text-decoration: none;
+    z-index: 3;
+  }
+  .nav-brand .brand-blob {
+    position: absolute; left: 0; top: 0;
+    width: 273px; height: 177px;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 18px rgba(58,122,54,0.08));
+  }
+  .nav-brand img {
+    position: absolute; left: 48px; top: 14px;
+    width: 81px; height: 53px; display: block;
+    pointer-events: auto;
+  }
+  .nav-burger {
+    pointer-events: auto;
+    position: absolute; top: 0; right: 0;
+    width: 90px; height: 90px; border: 0; cursor: pointer;
+    background: linear-gradient(140deg, #79c294 0%, #57B38A 60%, #4ea780 100%);
+    border-radius: 0 0 0 28px;
+    display: grid; place-items: center;
+    box-shadow: 0 8px 22px rgba(58,122,54,0.28);
+    transition: opacity .25s ease;
+    z-index: 3;
+  }
+  .nav-burger:hover { box-shadow: 0 12px 26px rgba(58,122,54,0.32); }
+  .nav.is-open .nav-burger { opacity: 0; pointer-events: none; }
+  .nav-burger .lines { position: relative; width: 30px; height: 18px; }
+  .nav-burger .lines span {
+    position: absolute; left: 0; right: 0;
+    height: 2.5px; border-radius: 4px; background: #fff;
+  }
+  .nav-burger .lines span:nth-child(1) { top: 0; }
+  .nav-burger .lines span:nth-child(2) { top: 8px; }
+  .nav-burger .lines span:nth-child(3) { top: 16px; }
+
+  .nav-drawer {
+    pointer-events: none;
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 374px;
+    background: transparent;
+    z-index: 101;
+    overflow: hidden;
+    transform: translateY(-100%);
+    transition: transform .55s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-drawer.is-open { pointer-events: auto; transform: translateY(0); }
+  .nd-bar {
+    position: absolute; left: -8px; top: -16px;
+    right: -8px; width: auto; height: 320px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #57B38A 0%, #C3D974 100%);
+  }
+  .nd-list {
+    position: absolute; left: 50%; transform: translateX(-50%); top: 47px;
+    width: min(690px, 84vw);
+    list-style: none;
+    display: flex; flex-direction: column; gap: 20px;
+    z-index: 2;
+  }
+  .nd-list li { display: flex; align-items: center; gap: 32px; height: 35px; }
+  .nd-list a {
+    display: inline-flex; align-items: center; gap: 32px;
+    text-decoration: none;
+    transition: transform .2s ease, opacity .2s ease;
+    opacity: 0; transform: translateX(-10px);
+  }
+  .nav-drawer.is-open .nd-list a {
+    opacity: 1; transform: translateX(0);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-drawer.is-open .nd-list li:nth-child(1) a { transition-delay: .14s; }
+  .nav-drawer.is-open .nd-list li:nth-child(2) a { transition-delay: .22s; }
+  .nav-drawer.is-open .nd-list li:nth-child(3) a { transition-delay: .30s; }
+  .nav-drawer.is-open .nd-list li:nth-child(4) a { transition-delay: .38s; }
+  .nd-list a:hover { transform: translateX(6px) !important; }
+  .nd-list a .num {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.77em;
+    color: #fff;
+  }
+  .nd-list a .ttl {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 22px; letter-spacing: 0.06em;
+    color: #fff;
+  }
+  .nd-list a .sub {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 500; font-size: 13px; letter-spacing: 0.32em;
+    color: rgba(255,255,255,0.92); text-transform: uppercase;
+  }
+  .nd-close {
+    position: absolute; right: 42px; left: auto; top: 53px;
+    width: 32px; height: 32px;
+    background: transparent; border: 0; cursor: pointer;
+    z-index: 3;
+  }
+  .nd-close::before, .nd-close::after {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    width: 40px; height: 3px;
+    background: #fff; border-radius: 4px;
+    transform-origin: 50% 50%;
+  }
+  .nd-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .nd-close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  /* ───── BREADCRUMB (below MV) ───── */
+  .breadcrumb {
+    width: 100%;
+    padding: 0 120px;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-size: 12px; letter-spacing: 0.08em; color: var(--ink);
+    background: #fff;
+  }
+  .breadcrumb a { color: var(--ink); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--green-primary); }
+  .breadcrumb .sep { margin: 0 10px; color: rgba(0,0,0,0.25); }
+
+  /* ───── HERO ───── */
+  .page-hero {
+    position: relative;
+    width: 100%;
+    height: 361px;
+    overflow: hidden;
+    background: #1f2a44;
+    margin-top: 0;
+  }
+  .page-hero .bg {
+    position: absolute; inset: 0;
+    background: url("assets/about-mv.png") center/cover no-repeat;
+    background-position: center 60%;
+  }
+  .page-hero .bg::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: rgba(97,93,93,0.30);
+  }
+  .page-hero .wave-bottom {
+    position: absolute; left: 0; right: 0; bottom: -1px;
+    width: 100%; height: 60px;
+    display: block;
+    color: #fff;
+  }
+  .page-hero .wave-bottom-sp { display: none; }
+  .page-hero-inner {
+    position: relative; z-index: 2;
+    width: 100%; height: 100%; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding-bottom: 30px;
+    text-align: center;
+  }
+  .page-hero .eyebrow {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 700; font-size: 13px;
+    letter-spacing: 0.77em;
+    color: #fff;
+    margin-bottom: 24px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  }
+  .page-hero h1 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 56px;
+    line-height: 1.5; letter-spacing: 0.05em;
+    color: #fff;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.38);
+  }
+
+  /* ───── SECTION HEADING (used in multiple sections) ───── */
+  .br-sp { display: none; }
+  .section-heading {
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    margin: 0 auto;
+  }
+  .section-heading h2 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 38px;
+    line-height: 1.5; letter-spacing: 0.05em;
+    color: var(--green-primary);
+  }
+  .section-heading .wave-mark {
+    width: 118px; height: 10px;
+    background: url("assets/mv-under.png") center/contain no-repeat;
+  }
+  .section-heading p.lede {
+    margin-top: 12px;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500; font-size: 16px;
+    line-height: 2; letter-spacing: 0.05em;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+  .section-heading p.lede-light {
+    margin-top: 4px;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-weight: 300; font-size: 15.2px;
+    line-height: 2; color: var(--ink);
+  }
+
+  /* ───── SECTION 2 · 自然の音の種類を知る ───── */
+  .categories {
+    width: 100%;
+    padding: 120px 0 100px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 56px;
+    background: #fff;
+    position: relative;
+  }
+  .cat-list {
+    width: 100%; max-width: 1200px;
+    display: flex; flex-direction: column; gap: 80px;
+    margin-top: 24px;
+  }
+  .cat-row {
+    position: relative;
+    width: 100%; max-width: 1200px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 60px;
+  }
+  .cat-row.is-reverse { direction: rtl; }
+  .cat-row.is-reverse > * { direction: ltr; }
+
+  .cat-media {
+    position: relative;
+    height: 360px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* teal decoration circle behind/over the bottom-right of the image */
+  .cat-media .cat-deco {
+    position: absolute;
+    right: -10px; bottom: -40px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: #8ECEC9;
+    z-index: 0;
+  }
+  .cat-media .cat-img-main,
+  .cat-media .cat-img-sub {
+    position: relative;
+    z-index: 1;
+  }
+  .cat-media .cat-img-main {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+  /* number bubble overlaying top-left of the image */
+  .cat-media .num-bubble {
+    position: absolute;
+    top: 20px; left: 100px;
+    width: 70px; height: 70px;
+    border-radius: 9999px;
+    display: grid; place-items: center;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 24px;
+    color: #fff;
+    background: var(--green-primary);
+    box-shadow: 0 4px 14px rgba(74,128,64,0.25);
+    z-index: 2;
+  }
+  /* on reversed (img on right) rows, mirror sides */
+  .cat-row.is-reverse .cat-media .num-bubble { left: 100px; right: auto; }
+  .cat-row.is-reverse .cat-media .cat-img-sub {
+    left: -16px; right: auto;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  /* row 03: plant / wind — yellow-green shape, larger leaf icon */
+  .cat-row.is-plant .cat-media .cat-img-sub {
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    bottom: 20px; right: 16px;
+  }
+  .cat-row.is-plant .cat-media .cat-deco {
+    background: #C3D974;
+    right: 70px; bottom: -40px;
+  }
+  .cat-row.is-plant .cat-text .cat-icon {
+    width: 45px;
+    left: 192px; right: auto; top: -30px;
+  }
+  .cat-media .cat-img-sub {
+    position: absolute;
+    width: 142px; height: 142px;
+    border-radius: 50%;
+    object-fit: cover;
+    bottom: -16px; right: -16px;
+    box-shadow: 0 6px 14px rgba(51,107,51,0.18);
+    background: #fff;
+  }
+
+  .cat-text {
+    position: relative;
+    display: flex; flex-direction: column; gap: 18px;
+    padding: 0 24px;
+  }
+  .cat-row.is-reverse .cat-text { padding: 0 24px 0 60px; }
+  .cat-text .cat-heading {
+    display: inline-flex; align-items: center;
+  }
+  /* icon moved out of the heading: absolutely placed near the end of the description */
+  .cat-text .cat-icon {
+    position: absolute;
+    right: 200px;
+    top: -10px;
+    width: 56px; height: auto;
+  }
+  .cat-text h3 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 28px;
+    line-height: 1.75; letter-spacing: 0.05em;
+    color: var(--green-primary);
+  }
+  .cat-text p {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500; font-size: 16px;
+    line-height: 2; letter-spacing: 0.05em;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+  .cat-text .cat-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 16px;
+    letter-spacing: 0.05em;
+    color: var(--green-primary);
+    text-decoration: none;
+    align-self: flex-end;
+    margin-right: 220px;
+    transition: gap .2s ease;
+  }
+  .cat-text .cat-link:hover { gap: 16px; }
+  .cat-text .cat-link::after {
+    content: "→";
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 14px;
+  }
+
+  /* ───── SECTION 3 · 音が変わる「条件」(gradient panel) ───── */
+  .conditions-wrap {
+    width: 100%;
+    padding: 0 50px 80px;
+    background: #fff;
+  }
+  .conditions {
+    width: 100%; max-width: 1340px;
+    margin: 0 auto;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #EDFFF0 0%, #8ECEC9 100%);
+    padding: 120px 70px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 56px;
+  }
+  .conditions .section-heading h2,
+  .conditions .section-heading p.lede {
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(80,90,80,0.18);
+  }
+  .conditions .section-heading h2 { color: var(--green-primary); text-shadow: none; }
+
+  .equation-card {
+    width: 100%; max-width: 1106px;
+    border-radius: 24px;
+    background: #fff;
+    padding: 50px 60px;
+    box-shadow: 0 14px 36px rgba(58,122,54,0.18);
+    display: flex; flex-direction: column; align-items: center; gap: 30px;
+  }
+  .equation {
+    display: flex; align-items: center; justify-content: center;
+    gap: 24px;
+  }
+  /* image-based chips: the PNG carries the shape, icon and label */
+  .eq-chip { background: none !important; border: 0 !important; box-shadow: none !important; }
+  .eq-chip.triangle { transform: none; }
+  .eq-chip .chip-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .eq-chip {
+    position: relative;
+    width: 156px; height: 156px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(58,122,54,0.1);
+    background: rgba(87,179,138,0.2);
+    border: 2px solid #d9efde;
+  }
+  .eq-chip.circle { border-radius: 9999px; }
+  .eq-chip.rounded {
+    border-radius: 20px;
+    background: rgba(142,206,201,0.2);
+    border-color: var(--teal);
+  }
+  .eq-chip.triangle {
+    background: none; border: 0;
+    box-shadow: none;
+    width: 170px; height: 170px;
+    align-self: center;
+    transform: translateX(-6px);
+    /* triangle drawn via svg, sized ~170px */
+  }
+  .eq-chip.triangle svg:not(.ico) {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 8px 24px rgba(58,122,54,0.1));
+  }
+  .eq-chip .ico {
+    width: 36px; height: 36px;
+    color: var(--green-primary);
+  }
+  .eq-chip .label {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 15px;
+    color: var(--green-primary);
+    position: relative; z-index: 1;
+  }
+  .eq-chip.triangle .ico,
+  .eq-chip.triangle .label { margin-top: 18px; }
+  .eq-chip.triangle .ico { position: relative; z-index: 1; transform: translateY(8px); }
+  .eq-chip.triangle .label { transform: translateY(-8px); }
+  .eq-op {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 28px;
+    color: rgba(58,122,54,0.4);
+  }
+  .eq-result {
+    width: 377px; height: 109px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #57B38A 0%, #C3D974 100%);
+    box-shadow: 0 12px 30px rgba(87,179,138,0.4);
+    display: grid; place-items: center;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 22px;
+    letter-spacing: 0.05em;
+    color: #fff;
+  }
+  .eq-equals {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 28px;
+    color: rgba(58,122,54,0.4);
+    display: inline-block;
+    transform: rotate(90deg);
+  }
+
+  /* example combo cards */
+  .examples {
+    width: 100%; max-width: 1200px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 66px;
+    margin-top: 36px;
+  }
+  .ex-card { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+  .ex-card h4 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 24px;
+    line-height: 1.75; letter-spacing: 0.05em;
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(87,179,138,0.4);
+  }
+  .ex-card .ex-photo {
+    position: relative;
+    width: 356px; height: 282px;
+    background-size: contain; background-position: center; background-repeat: no-repeat;
+  }
+  .ex-card .ex-tags {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .ex-tag {
+    width: 67px; height: 67px;
+    display: grid; place-items: center;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 20px;
+    color: var(--green-primary);
+    background: #ddf0e8;
+    border: 2px solid var(--green-primary);
+    box-shadow: 0 8px 24px rgba(58,122,54,0.1);
+  }
+  .ex-tag.circle { border-radius: 9999px; }
+  .ex-tag.rounded {
+    border-radius: 16px;
+    background: var(--teal-soft);
+    border-color: var(--teal);
+  }
+  .ex-tag.triangle {
+    background: var(--yellow-soft);
+    border: 0;
+    width: 78px; height: 70px;
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 78 70'><path d='M 39 0 L 78 70 L 0 70 Z'/></svg>") center/100% 100% no-repeat;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 78 70'><path d='M 39 0 L 78 70 L 0 70 Z'/></svg>") center/100% 100% no-repeat;
+    position: relative;
+  }
+  .ex-tag.triangle::before {
+    content: "";
+    position: absolute; inset: 4px;
+    background: var(--yellow-soft);
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 78 70'><path d='M 39 0 L 78 70 L 0 70 Z'/></svg>") center/100% 100% no-repeat;
+  }
+  .ex-tag.triangle span {
+    position: relative; z-index: 1;
+    color: var(--green-primary);
+    padding-top: 16px;
+  }
+  .ex-cross {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 500; font-size: 14px;
+    color: #fff;
+  }
+  .ex-card p.ex-desc {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500; font-size: 14px;
+    line-height: 1.95; color: #fff;
+    white-space: pre-line;
+    text-shadow: 0 2px 6px rgba(87,179,138,0.4);
+  }
+
+  /* ───── SECTION 5 · CTA ───── */
+  .cta-section {
+    width: 100%;
+    padding: 0 50px 120px;
+    background: #fff;
+  }
+  .cta-card-wrap {
+    width: 100%; max-width: 1340px;
+    margin: 0 auto;
+    border-radius: 24px;
+    background: #EDFFF0;
+    padding: 100px 70px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 30px;
+  }
+  .cta-grid {
+    width: 100%; max-width: 1200px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 20px;
+  }
+  .cta-card {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    height: 240px;
+    color: #fff;
+    text-decoration: none;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 48px;
+    transition: transform .25s ease, box-shadow .25s ease;
+    box-shadow: 0 10px 30px rgba(58,122,54,0.18);
+  }
+  .cta-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(58,122,54,0.28); }
+  .cta-card .cta-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background-size: cover; background-position: center;
+  }
+  .cta-card.lib {
+    background: transparent;
+    box-shadow: none;
+  }
+  .cta-card.lib:hover { box-shadow: none; }
+  .cta-card.lib .cta-bg {
+    background:
+      linear-gradient(rgba(51,107,51,0.4), rgba(51,107,51,0.4)),
+      url("assets/relate-bar01.png") center/100% 100% no-repeat;
+    -webkit-mask: url("assets/relate-bar01.png") center/100% 100% no-repeat;
+            mask: url("assets/relate-bar01.png") center/100% 100% no-repeat;
+    transition: background-color .25s ease, filter .25s ease;
+  }
+  .cta-card.lib:hover .cta-bg { filter: brightness(1.18); }
+  .cta-card.scene {
+    background: transparent;
+    box-shadow: none;
+  }
+  .cta-card.scene:hover { box-shadow: none; }
+  .cta-card.scene .cta-bg {
+    background:
+      linear-gradient(rgba(67,81,67,0.4), rgba(67,81,67,0.4)),
+      url("assets/relate-bar02.png") center/100% 100% no-repeat;
+    transition: filter .25s ease;
+  }
+  .cta-card.scene:hover .cta-bg { filter: brightness(1.18); }
+  .cta-card > * { position: relative; z-index: 1; }
+  .cta-card .cta-eyebrow {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 700; font-size: 12px; letter-spacing: 0.32em;
+    margin-bottom: 12px; opacity: .92;
+  }
+  .cta-card h3 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 28px;
+    letter-spacing: 0.05em; margin-bottom: 12px;
+  }
+  .cta-card p {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500; font-size: 14px;
+    line-height: 1.9; max-width: 380px; opacity: .92;
+  }
+  .cta-card .arrow {
+    position: absolute; right: 36px; top: 50%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    display: grid; place-items: center;
+    transition: transform .25s ease, background .25s ease;
+    z-index: 2;
+  }
+  .cta-card:hover .arrow { transform: translateY(-50%) translateX(4px); background: rgba(255,255,255,0.35); }
+  .cta-card .arrow::after {
+    content: "→";
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 22px; color: #fff;
+  }
+
+  /* ───── FOOTER ───── */
+  .footer {
+    width: 100%;
+    padding: 52px 220px 36px;
+    display: flex; flex-direction: column; gap: 28px;
+    align-items: flex-start;
+  }
+  .footer .brand img { width: 81px; height: 53px; display: block; }
+  .footer-nav { display: flex; gap: 36px; }
+  .footer-nav a {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 12px;
+    letter-spacing: 0.07em; color: var(--ink);
+    text-decoration: none; transition: color .2s ease;
+  }
+  .footer-nav a:hover { color: var(--green-primary); }
+  .footer-copy {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 11px; letter-spacing: 0.08em; color: var(--ink);
+  }
+
+  /* ───── reveal-on-scroll ───── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 2.4s cubic-bezier(.2,.7,.2,1), transform 2.4s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.is-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ============ RESPONSIVE · md 768–1279 / sm 320–767 ============ */
+  @media (max-width: 1279px) {
+    .breadcrumb { padding: 20px 56px !important; }
+    .conditions-wrap { padding: 0 40px 70px; }
+    .examples { grid-template-columns: repeat(2, 1fr); gap: 48px 40px; }
+    .ex-card .ex-photo { width: 100%; max-width: 356px; height: auto; aspect-ratio: 356 / 282; margin: 0 auto; }
+    .footer { padding: 48px 48px 32px; }
+  }
+
+  @media (max-width: 767px) {
+    /* SP-only line break helper */
+    .br-sp { display: inline; }
+    /* SP: unify h3 heading size */
+    h3 { font-size: 22px !important; }
+    h4 { font-size: 20px !important; }
+    p { font-size: 14px !important; }
+    h2 { font-size: 28px !important; }
+    /* sm nav: smaller logo, roomier tap targets */
+    .nav-brand { transform: scale(0.64); transform-origin: top left; }
+    .nav-burger { width: 58px; height: 58px; }
+    .nav-drawer { height: 560px; }
+    .nd-bar { height: 520px; }
+    .nd-close { right: 22px; top: 24px; }
+    .nd-list { gap: 26px; top: 112px; }
+    .nd-list li { height: auto; }
+    .nd-list a { flex-wrap: wrap; gap: 4px 14px; }
+    .nd-list a .ttl { font-size: 20px; }
+
+    .page-hero { height: 300px; }
+    .page-hero .bg { background-image: url("assets/sp-about-mv.png"); background-position: center; }
+    .page-hero .wave-bottom { display: none; }
+    .page-hero .wave-bottom-sp { display: block; height: 22px; }
+    .page-hero h1 { font-size: 31px; }
+    .page-hero .eyebrow { font-size: 11px; letter-spacing: 0.5em; margin-bottom: 16px; }
+    .breadcrumb { padding: 14px 22px !important; }
+    .section-heading h2 { font-size: 27px; }
+
+    /* category rows stack */
+    .categories { padding: 56px 22px 64px; gap: 28px; }
+    .cat-list { gap: 56px; margin-top: 0; }
+    /* SP: shrink the teal deco circle behind 水の音 (row 01) */
+    .cat-list .cat-row:nth-child(1) .cat-media .cat-deco { width: 170px; height: 170px; right: 22px; bottom: -14px; }
+    /* SP: shrink the deco circle behind 植物・風の音 (row 03) */
+    .cat-row.is-plant .cat-media .cat-deco { width: 170px; height: 170px; right: 138px; bottom: -16px; }
+    /* SP: shrink the secondary round image */
+    .cat-media .cat-img-sub { width: 120px !important; height: 120px !important; }
+    .cat-row, .cat-row.is-reverse { grid-template-columns: 1fr; direction: ltr; gap: 28px; }
+    .cat-media { height: 280px; }
+    .cat-text, .cat-row.is-reverse .cat-text { padding: 0; }
+    /* SP: show category icons positioned over each image */
+    .cat-row { position: relative; }
+    .cat-text { position: static; }
+    .cat-text .cat-icon {
+      display: block !important; position: absolute;
+      width: 46px !important; height: auto; z-index: 3;
+    }
+    .cat-list .cat-row:nth-child(1) .cat-text .cat-icon { top: 8px; right: 12px; left: auto; }
+    .cat-row.is-reverse .cat-text .cat-icon { top: 230px; right: 12px; left: auto; }
+    .cat-row.is-plant .cat-text .cat-icon { top: 6px; right: 12px; left: auto; width: 54px !important; }
+    /* reset desktop-only offsets that leave huge gaps on mobile */
+    .cat-text .cat-link { margin-right: 0; align-self: flex-start; }
+    .cat-media .num-bubble { left: 16px; top: 12px; width: 60px; height: 60px; font-size: 22px; }
+    .cat-row.is-reverse .cat-media .num-bubble { left: 16px; right: auto; }
+
+    /* conditions equation shrinks to fit */
+    .conditions { padding: 48px 12px; gap: 32px; }
+    .conditions-wrap { padding: 0 14px 56px; }
+    .equation-card { padding: 38px 12px; gap: 16px; }
+    .equation { gap: 1px; padding-left: 8px; }
+    .eq-chip { width: 76px; height: 76px; }
+    .eq-chip.triangle { width: 84px; height: 84px; }
+    .eq-chip .ico { width: 18px !important; height: 18px !important; }
+    .eq-chip.triangle .ico { width: 28px !important; height: 28px !important; }
+    .eq-chip .label { font-size: 11px; }
+    .eq-op { font-size: 16px; }
+    .eq-equals { font-size: 20px; }
+    .eq-result { width: 100%; max-width: 300px; height: auto; padding: 16px 20px; font-size: 20px; }
+
+    /* examples single column */
+    .examples { grid-template-columns: 1fr; gap: 44px; }
+
+    /* CTA + footer */
+    .cta-section { padding: 0 22px 72px; }
+    .cta-card-wrap { padding: 56px 22px 64px; }
+    .cta-grid { grid-template-columns: 1fr; gap: 20px; }
+    .cta-card { height: auto; min-height: 190px; padding: 36px 28px; }
+    /* SP: library photo clipped to a scalloped wave */
+    .cta-card.lib .cta-bg {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 339' preserveAspectRatio='none'%3E%3Cpath d='M0 0H375V321.58H0Z' fill='%23fff'/%3E%3Cpath d='M375 329.1C343.75 329.1 343.75 313.11 312.5 313.11C281.25 313.11 281.25 329.1 250 329.1C218.75 329.1 218.75 313.11 187.5 313.11C156.25 313.11 156.25 329.1 125 329.1C93.75 329.1 93.75 313.11 62.5 313.11C31.25 313.11 31.25 329.1 0 329.1' stroke='%23fff' stroke-width='18' fill='none'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 339' preserveAspectRatio='none'%3E%3Cpath d='M0 0H375V321.58H0Z' fill='%23fff'/%3E%3Cpath d='M375 329.1C343.75 329.1 343.75 313.11 312.5 313.11C281.25 313.11 281.25 329.1 250 329.1C218.75 329.1 218.75 313.11 187.5 313.11C156.25 313.11 156.25 329.1 125 329.1C93.75 329.1 93.75 313.11 62.5 313.11C31.25 313.11 31.25 329.1 0 329.1' stroke='%23fff' stroke-width='18' fill='none'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+      background:
+        linear-gradient(rgba(51,107,51,0.4), rgba(51,107,51,0.4)),
+        url("assets/sp-library-mv.png") center/cover no-repeat;
+    }
+    /* SP: scene card keeps the PC wave shape, only the photo is swapped */
+    .cta-card.scene .cta-bg {
+      background:
+        linear-gradient(rgba(67,81,67,0.4), rgba(67,81,67,0.4)),
+        url("assets/sp-relate-bar02.png") center/cover no-repeat;
+      -webkit-mask: url("assets/relate-bar02.png") center/100% 100% no-repeat;
+              mask: url("assets/relate-bar02.png") center/100% 100% no-repeat;
+    }
+    .footer { padding: 40px 24px 28px; }
+    /* SP: move CTA arrow to top-right corner & shrink it */
+    .cta-card .arrow { right: 16px; top: 16px; transform: none; width: 34px; height: 34px; background: rgba(0,0,0,0.32); }
+    .cta-card:hover .arrow { transform: translateX(4px); background: rgba(0,0,0,0.46); }
+    .cta-card .arrow::after { font-size: 18px; }
+    .footer-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 36px; justify-items: start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a class="nav-brand" href="index.html" aria-label="むさび">
+    <svg class="brand-blob" width="273" height="177" viewBox="0 0 273 177" fill="#fff" aria-hidden="true">
+      <path d="M 74.5 110.001 C 14 112.001 33.5 168 0 177 L 0 0 L 273 0.001 C 256.5 29.501 200 17.501 183.5 52.501 C 168.09 85.19 135 108.002 74.5 110.001 Z" />
+    </svg>
+    <img src="assets/logo.svg" alt="むさび">
+  </a>
+  <button class="nav-burger" id="navBurger" aria-label="メニューを開く" aria-expanded="false">
+    <span class="lines"><span></span><span></span><span></span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog" aria-label="グローバルメニュー">
+  <div class="nd-bar"></div>
+  <ul class="nd-list">
+    <li><a href="about.html" data-close><span class="num">01</span><span class="ttl">自然の音を知る</span><span class="sub">ABOUT NATURAL SOUNDS</span></a></li>
+    <li><a href="scenes.html" data-close><span class="num">02</span><span class="ttl">音を楽しむシーン</span><span class="sub">SCEANS</span></a></li>
+    <li><a href="library.html" data-close><span class="num">03</span><span class="ttl">音ライブラリー</span><span class="sub">SOUNDS LIBLARY</span></a></li>
+    <li><a href="tips.html" data-close><span class="num">04</span><span class="ttl">音を楽しむヒント</span><span class="sub">TIPS</span></a></li>
+  </ul>
+  <button class="nd-close" data-close aria-label="メニューを閉じる"></button>
+</div>
+
+<!-- HERO -->
+<section class="page-hero" id="top">
+  <div class="bg"></div>
+  <div class="page-hero-inner">
+    <span class="eyebrow">ABOUT NATURAL SOUNDS</span>
+    <h1>自然の音を知る</h1>
+  </div>
+  <svg class="wave-bottom" viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <path d="M 0 60 L 0 30 C 60 6 120 54 180 30 S 300 6 360 30 S 480 54 540 30 S 660 6 720 30 S 840 54 900 30 S 1020 6 1080 30 S 1200 54 1260 30 S 1380 6 1440 30 L 1440 60 Z" fill="currentColor"/>
+  </svg>
+  <svg class="wave-bottom wave-bottom-sp" viewBox="0 0 375 24" preserveAspectRatio="none">
+    <path d="M 0 20 C 31.25 20 31.25 4 62.5 4 C 93.75 4 93.75 20 125 20 C 156.25 20 156.25 4 187.5 4 C 218.75 4 218.75 20 250 20 C 281.25 20 281.25 4 312.5 4 C 343.75 4 343.75 20 375 20 L 375 24 L 0 24 Z" fill="currentColor"/>
+  </svg>
+</section>
+
+<!-- BREADCRUMB (below MV) -->
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">/</span>
+  <span>自然の音を知る</span>
+</nav>
+
+<!-- SECTION 2 · 自然の音の種類を知る -->
+<section class="categories" id="categories">
+  <div class="section-heading">
+    <h2>自然の音の種類を<br class="br-sp">知る</h2>
+    <span class="wave-mark"></span>
+    <p class="lede-light" style="font-weight: 500">大きく4つの音のグループから、自然の世界を紐解いてみましょう。</p>
+  </div>
+
+  <div class="cat-list">
+
+    <!-- 01 水の音 -->
+    <article class="cat-row">
+      <div class="cat-media">
+        <span class="cat-deco"></span>
+        <img class="cat-img-main" src="assets/about-01.png" alt="水の音" />
+        <span class="num-bubble">01</span>
+      </div>
+      <div class="cat-text">
+        <div class="cat-heading">
+          <h3>水の音</h3>
+          <img class="cat-icon" src="assets/about-01-icon.svg" alt="" />
+        </div>
+        <p>川のせせらぎ、雨、波の寄せ返し。
+リラックスを誘う代表的な音。</p>
+        <a class="cat-link" href="library.html#water">音を聴く</a>
+      </div>
+    </article>
+
+    <!-- 02 生き物の声 -->
+    <article class="cat-row is-reverse">
+      <div class="cat-media">
+        <img class="cat-img-main" src="assets/about-02-1.png" alt="" />
+        <img class="cat-img-sub" src="assets/about-02-2.png" alt="" style="width: 186px; height: 186px" />
+        <span class="num-bubble">02</span>
+      </div>
+      <div class="cat-text">
+        <div class="cat-heading">
+          <h3>生き物の声</h3>
+          <img class="cat-icon" src="assets/about-02-icon.svg" alt="" />
+        </div>
+        <p>朝のさえずり、夕方の虫の声。
+季節の移ろいを教えてくれる存在。</p>
+        <a class="cat-link" href="library.html#living">音を聴く</a>
+      </div>
+    </article>
+
+    <!-- 03 植物・風の音 -->
+    <article class="cat-row is-plant">
+      <div class="cat-media">
+        <span class="cat-deco"></span>
+        <img class="cat-img-main" src="assets/about-03-1.png" alt="" />
+        <img class="cat-img-sub" src="assets/about-03-2.png" alt="" />
+        <span class="num-bubble">03</span>
+      </div>
+      <div class="cat-text">
+        <div class="cat-heading">
+          <h3>植物・風の音</h3>
+          <img class="cat-icon" src="assets/about-03-icon.svg" alt="" style="width: 89px" />
+        </div>
+        <p>葉のささやき、木々のきしみ。
+風と一緒に楽しむ、繊細な響き。</p>
+        <a class="cat-link" href="library.html#plant">音を聴く</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- SECTION 3 · 音が変わる「条件」 -->
+<section class="conditions-wrap" id="conditions">
+  <div class="conditions">
+    <div class="section-heading">
+      <h2>音が変わる<br class="br-sp">「条件」</h2>
+      <span class="wave-mark"></span>
+      <p class="lede" style="color: rgb(90, 90, 82)">同じ場所でも、時間や天気が変われば聴こえる音はまるで違う。
+3つの条件が重なり合って、その瞬間だけの音色が生まれます。</p>
+    </div>
+
+    <div class="equation-card">
+      <div class="equation">
+        <div class="eq-chip circle">
+          <img class="chip-img" src="assets/about-maru.png" alt="時間帯" />
+        </div>
+        <span class="eq-op">×</span>
+        <div class="eq-chip rounded">
+          <img class="chip-img" src="assets/about-shikaku.png" alt="季節" />
+        </div>
+        <span class="eq-op">×</span>
+        <div class="eq-chip triangle">
+          <img class="chip-img" src="assets/about-sankaku.png" alt="天気" />
+        </div>
+      </div>
+      <div class="eq-equals">=</div>
+      <div class="eq-result">一期一会の音</div>
+    </div>
+
+    <!-- 3 examples -->
+    <div class="examples">
+      <article class="ex-card">
+        <h4>春の夜明けの鳥</h4>
+        <div class="ex-photo" style="background-image:url('assets/about-hint01.png');">
+        </div>
+        <p class="ex-desc">夜明けと共に始まる鳥たちの合唱。
+春は1年で最も賑やか。</p>
+      </article>
+
+      <article class="ex-card">
+        <h4>夏の夕の雨音</h4>
+        <div class="ex-photo" style="background-image:url('assets/about-hint02.png');">
+        </div>
+        <p class="ex-desc">激しい夕立が過ぎ、静かに降り続く雨。
+虫の声と交じり合う。</p>
+      </article>
+
+      <article class="ex-card">
+        <h4>雪の夜の静寂</h4>
+        <div class="ex-photo" style="background-image:url('assets/about-hint03.png');">
+        </div>
+        <p class="ex-desc">雪が音を吸い込む。世界が静まり返ったとき、
+屋根から雪が落ちる音だけが響く。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5 · CTA -->
+<section class="cta-section">
+  <div class="cta-card-wrap">
+    <div class="section-heading">
+      <h2>次は、<br class="br-sp">聴いてみる</h2>
+      <span class="wave-mark"></span>
+      <p class="lede-light" style="font-weight: 500">知ったあとは、実際に耳をすませてみましょう。</p>
+    </div>
+
+    <div class="cta-grid">
+      <a class="cta-card lib" href="library.html">
+        <div class="cta-bg"></div>
+        <div class="cta-eyebrow">SOUND LIBRARY</div>
+        <h3>音ライブラリーへ</h3>
+        <p>天気や季節に合った自然の音を、いつでも実際に聴くことができます。</p>
+        <span class="arrow"></span>
+      </a>
+      <a class="cta-card scene" href="scenes.html">
+        <div class="cta-bg"></div>
+        <div class="cta-eyebrow">SCENES</div>
+        <h3>音を楽しむシーンへ</h3>
+        <p>日常のどんな場面で、どんな音が寄り添ってくれるのか覗いてみましょう。</p>
+        <span class="arrow"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="brand">
+    <img src="assets/logo.svg" alt="むさび" width="81" height="53" />
+  </div>
+  <nav class="footer-nav">
+    <a href="about.html">自然の音とは</a>
+    <a href="scenes.html">楽しむシーン</a>
+    <a href="library.html">音ライブラリー</a>
+    <a href="tips.html">ヒント</a>
+  </nav>
+  <div class="footer-copy">© 2026 clanptoon</div>
+</footer>
+
+<script>
+  // hamburger drawer
+  (() => {
+    const nav = document.getElementById('nav');
+    const burger = document.getElementById('navBurger');
+    const drawer = document.getElementById('navDrawer');
+    if (!nav || !burger || !drawer) return;
+    function open() {
+      nav.classList.add('is-open');
+      drawer.classList.add('is-open');
+      burger.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    function close() {
+      nav.classList.remove('is-open');
+      drawer.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+    burger.addEventListener('click', () => {
+      (nav.classList.contains('is-open') ? close : open)();
+    });
+    drawer.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
+    drawer.addEventListener('click', (e) => { if (e.target === drawer || (e.target.classList && e.target.classList.contains('nd-bar'))) close(); });
+    document.addEventListener('click', (e) => {
+      if (!nav.classList.contains('is-open')) return;
+      if (drawer.contains(e.target) || burger.contains(e.target)) return;
+      close();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  })();
+
+  // scroll-reveal
+  (() => {
+    const items = [];
+
+    document.querySelectorAll('.section-heading').forEach((sh) => {
+      const h2 = sh.querySelector('h2');
+      const children = [];
+      if (h2) children.push(h2);
+      const wave = sh.querySelector('.wave-mark'); if (wave) children.push(wave);
+      const lede = sh.querySelector('p'); if (lede) children.push(lede);
+      children.forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = (i * 320) + 'ms';
+        items.push(el);
+      });
+    });
+
+    document.querySelectorAll('.cat-row').forEach((row) => {
+      const media = row.querySelector('.cat-media');
+      const text  = row.querySelector('.cat-text');
+      if (media) { media.classList.add('reveal'); media.style.transitionDelay = '0ms'; items.push(media); }
+      if (text)  { text.classList.add('reveal');  text.style.transitionDelay  = '380ms'; items.push(text); }
+    });
+
+    document.querySelectorAll('.equation-card, .ex-card, .cta-card').forEach((el, i) => {
+      el.classList.add('reveal');
+      if (el.classList.contains('ex-card')) {
+        const grid = el.parentElement;
+        const sibIdx = grid ? Array.from(grid.children).indexOf(el) : 0;
+        el.style.transitionDelay = (sibIdx * 320) + 'ms';
+      } else if (el.classList.contains('cta-card')) {
+        const grid = el.parentElement;
+        const sibIdx = grid ? Array.from(grid.children).indexOf(el) : 0;
+        el.style.transitionDelay = (sibIdx * 280) + 'ms';
+      }
+      items.push(el);
+    });
+
+    if (!('IntersectionObserver' in window)) {
+      items.forEach((el) => el.classList.add('is-in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    items.forEach((el) => io.observe(el));
+  })();
+</script>
+
+<script src="assets/to-top.js"></script>
+</body>
+</html>

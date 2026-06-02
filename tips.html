@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>音を楽しむヒント | むさび</title>
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#e3ffe7"/>
+    <text x="50" y="60" font-size="30" font-family="serif" font-weight="700" text-anchor="middle" fill="#57b38a">楽</text>
+  </svg>
+</template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Zen+Kaku+Gothic+Antique:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-primary: #57b38a;
+    --green-deep: #336b33;
+    --green-mid: #4ab35d;
+    --green-soft: #e3ffe7;
+    --green-soft-2: #eef9ec;
+    --teal: #8eceC9;
+    --teal-soft: #e8f5f4;
+    --blue-teal: #4fa79b;
+    --yellow-soft: #f3f7e3;
+    --yellow-mid: #c3d974;
+    --ink: #5a5a52;
+    --shadow-cta: 0 4px 22px rgba(58,122,54,0.28);
+    --shadow-card: 0 8px 24px rgba(58,122,54,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }  html, body { background: #fff; color: #333; scroll-behavior: smooth; }
+  body {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    width: 100%; min-width: 320px;
+    display: flex; flex-direction: column; align-items: center;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ───── NAV ───── */
+  .nav { position: fixed; top: 0; left: 0; right: 0; height: 0; z-index: 102; pointer-events: none; }
+  .nav-brand {
+    pointer-events: auto;
+    position: absolute; top: 0; left: -8px;
+    width: 273px; height: 177px;
+    display: block; text-decoration: none;
+    z-index: 3;
+  }
+  .nav-brand .brand-blob {
+    position: absolute; left: 0; top: 0;
+    width: 273px; height: 177px;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 18px rgba(58,122,54,0.08));
+  }
+  .nav-brand img {
+    position: absolute; left: 48px; top: 14px;
+    width: 81px; height: 53px; display: block;
+    pointer-events: auto;
+  }
+  .nav-burger {
+    pointer-events: auto;
+    position: absolute; top: 0; right: 0;
+    width: 90px; height: 90px; border: 0; cursor: pointer;
+    background: linear-gradient(140deg, #79c294 0%, #57B38A 60%, #4ea780 100%);
+    border-radius: 0 0 0 28px;
+    display: grid; place-items: center;
+    box-shadow: 0 8px 22px rgba(58,122,54,0.28);
+    transition: opacity .25s ease;
+    z-index: 3;
+  }
+  .nav-burger:hover { box-shadow: 0 12px 26px rgba(58,122,54,0.32); }
+  .nav.is-open .nav-burger { opacity: 0; pointer-events: none; }
+  .nav-burger .lines { position: relative; width: 30px; height: 18px; }
+  .nav-burger .lines span {
+    position: absolute; left: 0; right: 0;
+    height: 2.5px; border-radius: 4px; background: #fff;
+  }
+  .nav-burger .lines span:nth-child(1) { top: 0; }
+  .nav-burger .lines span:nth-child(2) { top: 8px; }
+  .nav-burger .lines span:nth-child(3) { top: 16px; }
+
+  .nav-drawer {
+    pointer-events: none;
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 374px;
+    background: transparent;
+    z-index: 101;
+    overflow: hidden;
+    transform: translateY(-100%);
+    transition: transform .55s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-drawer.is-open { pointer-events: auto; transform: translateY(0); }
+  .nd-bar {
+    position: absolute; left: -8px; right: -8px; top: -16px;
+    width: auto; height: 320px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #57B38A 0%, #C3D974 100%);
+  }
+  .nd-list {
+    position: absolute; left: 50%; transform: translateX(-50%); top: 47px;
+    width: min(690px, 84vw);
+    list-style: none;
+    display: flex; flex-direction: column; gap: 20px;
+    z-index: 2;
+  }
+  .nd-list li { display: flex; align-items: center; gap: 32px; height: 35px; }
+  .nd-list a {
+    display: inline-flex; align-items: center; gap: 32px;
+    text-decoration: none;
+    transition: transform .2s ease, opacity .2s ease;
+    opacity: 0; transform: translateX(-10px);
+  }
+  .nav-drawer.is-open .nd-list a {
+    opacity: 1; transform: translateX(0);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-drawer.is-open .nd-list li:nth-child(1) a { transition-delay: .14s; }
+  .nav-drawer.is-open .nd-list li:nth-child(2) a { transition-delay: .22s; }
+  .nav-drawer.is-open .nd-list li:nth-child(3) a { transition-delay: .30s; }
+  .nav-drawer.is-open .nd-list li:nth-child(4) a { transition-delay: .38s; }
+  .nd-list a:hover { transform: translateX(6px) !important; }
+  .nd-list a .num {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.77em;
+    color: #fff;
+  }
+  .nd-list a .ttl {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 22px; letter-spacing: 0.06em;
+    color: #fff;
+  }
+  .nd-list a .sub {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 500; font-size: 13px; letter-spacing: 0.32em;
+    color: rgba(255,255,255,0.92); text-transform: uppercase;
+  }
+  .nd-close {
+    position: absolute; right: 42px; left: auto; top: 53px;
+    width: 32px; height: 32px;
+    background: transparent; border: 0; cursor: pointer;
+    z-index: 3;
+  }
+  .nd-close::before, .nd-close::after {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    width: 40px; height: 3px;
+    background: #fff; border-radius: 4px;
+    transform-origin: 50% 50%;
+  }
+  .nd-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .nd-close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  /* ───── BREADCRUMB (below MV) ───── */
+  .breadcrumb {
+    width: 100%;
+    padding: 20px 120px;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-size: 12px; letter-spacing: 0.08em; color: var(--ink);
+    background: #EDFFF0;
+  }
+  .breadcrumb a { color: var(--ink); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--green-primary); }
+  .breadcrumb .sep { margin: 0 10px; color: rgba(0,0,0,0.25); }
+
+  /* ───── HERO / MV ───── */
+  .page-hero {
+    position: relative;
+    width: 100%;
+    height: 361px;
+    overflow: hidden;
+    background: #EDFFF0;
+    margin-top: 0;
+  }
+  .page-hero .bg {
+    position: absolute; inset: 0;
+    background: url("assets/hint-mv.png") center/cover no-repeat;
+    background-position: center 50%;
+  }
+  .page-hero .bg::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.4) 0%, rgba(28,37,71,0.2) 50%, rgba(87,179,138,0.6) 100%);
+  }
+  .page-hero .wave-bottom {
+    position: absolute; left: 0; right: 0; bottom: -1px;
+    width: 100%; height: 60px;
+    display: block;
+    color: #fff;
+  }
+  .page-hero .wave-bottom-sp { display: none; }
+  .page-hero-inner {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 1440px; height: 100%; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding-bottom: 30px;
+    text-align: center;
+  }
+  .page-hero .eyebrow {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 700; font-size: 13px;
+    letter-spacing: 0.77em;
+    color: #fff;
+    margin-bottom: 24px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  }
+  .page-hero h1 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 56px;
+    line-height: 1.5; letter-spacing: 0.05em;
+    color: #fff;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.38);
+  }
+
+  /* ───── SECTION HEADING ───── */
+  .section-heading {
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    margin: 0 auto;
+  }
+  .section-heading h2 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 38px;
+    line-height: 1.5; letter-spacing: 0.05em;
+    color: var(--green-primary);
+  }
+  .section-heading .wave-mark {
+    width: 118px; height: 10px;
+    background: url("assets/mv-under.png") center/contain no-repeat;
+  }
+  .section-heading p.lede {
+    margin-top: 12px;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500; font-size: 16px;
+    line-height: 2; letter-spacing: 0.05em;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+
+  /* ───── FLOW SECTION (一日の流れに沿って) ───── */
+  .flow-section {
+    width: 100%;
+    padding: 120px 40px 130px;
+    display: flex; flex-direction: column; align-items: center;
+    background: linear-gradient(180deg, #EDFFF0 0%, #B9E0D6 55%, #8FC3C4 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .flow-bottom-arc {
+    position: absolute; left: 0; right: 0; bottom: -1px;
+    width: 100%; height: 120px;
+    display: block; pointer-events: none;
+  }
+  .timeline {
+    position: relative;
+    width: 100%; max-width: 1200px;
+    height: 2160px;
+    margin-top: 90px;
+  }
+  .timeline-path {
+    position: absolute;
+    left: 46%; top: 210px;
+    transform: translateX(-50%);
+    width: 640px; height: auto;
+    pointer-events: none;
+    opacity: .9;
+  }
+  .flow-item {
+    position: absolute;
+    width: 420px;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+  }
+  .flow-item.left  { left: 40px; }
+  .flow-item.right { right: 40px; }
+  .flow-time {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 28px;
+    letter-spacing: 0.05em;
+    color: var(--green-primary);
+    margin-bottom: 20px;
+    white-space: nowrap;
+    position: relative; z-index: 5;
+  }
+  .flow-photo {
+    position: relative;
+    width: 320px;
+    display: flex; justify-content: center;
+  }
+  .flow-photo img {
+    width: 320px; height: auto; display: block;
+    filter: drop-shadow(0 14px 30px rgba(58,90,58,0.18));
+  }
+  .flow-dot {
+    position: absolute;
+    transform: translateX(-50%);
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--green-primary);
+    box-shadow: 0 0 0 6px rgba(87,179,138,0.15);
+    z-index: 3;
+  }
+  /* sound tag pills floating near the photo */
+  .flow-tags {
+    position: absolute;
+    top: 28px;
+    display: flex; flex-direction: column; gap: 14px;
+    z-index: 4;
+  }
+  .flow-item.left  .flow-tags { right: -34px; align-items: flex-start; }
+  .flow-item.right .flow-tags { left: -34px; align-items: flex-end; }
+  .flow-tag {
+    position: relative;
+    display: inline-flex; align-items: center;
+    height: 38px; padding: 0 22px;
+    border-radius: 100px;
+    background: var(--green-primary);
+    border: 2px solid #fff;
+    box-shadow: 0 6px 16px rgba(58,122,54,0.20);
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: 0.12em;
+    color: #fff; white-space: nowrap;
+  }
+  .flow-tag::after {
+    content: ""; position: absolute;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--green-primary); border: 2px solid #fff;
+    bottom: -15px;
+  }
+  .flow-tag::before {
+    content: ""; position: absolute;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--green-primary); border: 2px solid #fff;
+    bottom: -26px;
+  }
+  .flow-item.left  .flow-tag::after { left: 16px; }
+  .flow-item.left  .flow-tag::before { left: 12px; }
+  .flow-item.right .flow-tag::after { right: 16px; }
+  .flow-item.right .flow-tag::before { right: 12px; }
+  /* inverted pill: white fill, green border + text */
+  .flow-tag.invert {
+    background: #fff;
+    border: 2px solid var(--green-primary);
+    color: var(--green-primary);
+  }
+  .flow-tag.invert::after,
+  .flow-tag.invert::before {
+    background: #fff;
+    border: 2px solid var(--green-primary);
+  }
+  /* mirror the tail dots to the right edge */
+  .flow-item.left .flow-tag.dots-right::after { left: auto; right: 16px; }
+  .flow-item.left .flow-tag.dots-right::before { left: auto; right: 12px; }
+  .flow-item.right .flow-tag.dots-left::after { right: auto; left: 16px; }
+  .flow-item.right .flow-tag.dots-left::before { right: auto; left: 12px; }
+  .flow-title {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 22px;
+    letter-spacing: 0.05em;
+    color: var(--green-primary);
+    margin-top: 22px;
+  }
+  .flow-desc {
+    margin-top: 12px;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500; font-size: 13.5px;
+    line-height: 1.85; letter-spacing: 0.04em;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+  /* evening / night items: light text on darker gradient */
+  .flow-item.is-dark .flow-title { color: #fff; }
+  .flow-item.is-dark .flow-desc  { color: rgba(255,255,255,0.92); }
+  .flow-item.is-dark .flow-time  { color: #fff; }
+
+  /* ───── MOOD / FLOWCHART SECTION ───── */
+  .mood-section {
+    width: 100%;
+    padding: 120px 40px 130px;
+    display: flex; flex-direction: column; align-items: center;
+    background: #fff;
+  }
+  .flowchart-wrap {
+    width: 100%; max-width: 1180px;
+    margin-top: 64px;
+  }
+  .flowchart-wrap img { width: 100%; height: auto; display: block; }
+
+  /* ───── CTA SECTION (次のアクションへ) ───── */
+  .cta-section {
+    width: 100%;
+    padding: 0 40px 120px;
+    background: #fff;
+    display: flex; justify-content: center;
+  }
+  .cta-card-wrap {
+    width: 100%; max-width: 1340px;
+    margin: 0 auto;
+    border-radius: 24px;
+    background: #EDFFF0;
+    padding: 90px 70px 100px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .cta-grid {
+    width: 100%; max-width: 1200px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 56px;
+  }
+  .cta-card {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    height: 240px;
+    color: #fff;
+    text-decoration: none;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 48px;
+    transition: transform .25s ease, box-shadow .25s ease;
+    box-shadow: 0 10px 30px rgba(58,122,54,0.18);
+  }
+  .cta-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(58,122,54,0.28); }
+  .cta-card .cta-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background-size: cover; background-position: center;
+    transition: filter .25s ease;
+  }
+  .cta-card:hover .cta-bg { filter: brightness(1.12); }
+  .cta-card.lib .cta-bg {
+    background:
+      linear-gradient(rgba(51,107,51,0.4), rgba(51,107,51,0.4)),
+      url("assets/relate-bar03.png") center/cover no-repeat;
+  }
+  .cta-card.tips {
+    background: transparent;
+    box-shadow: none;
+  }
+  .cta-card.tips:hover { box-shadow: none; }
+  .cta-card.tips .cta-bg {
+    background:
+      linear-gradient(rgba(36,36,36,0.42), rgba(36,36,36,0.42)),
+      url("assets/relate-bar04.png") center/100% 100% no-repeat;
+    -webkit-mask: url("assets/relate-bar04.png") center/100% 100% no-repeat;
+            mask: url("assets/relate-bar04.png") center/100% 100% no-repeat;
+    transition: background-color .25s ease, filter .25s ease;
+  }
+  .cta-card.tips:hover .cta-bg { filter: brightness(1.35); }
+  .cta-card > * { position: relative; z-index: 1; }
+  .cta-card .cta-eyebrow {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 700; font-size: 12px; letter-spacing: 0.32em;
+    margin-bottom: 12px; opacity: .92;
+  }
+  .cta-card h3 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 28px;
+    letter-spacing: 0.05em; margin-bottom: 12px;
+  }
+  .cta-card p {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500; font-size: 14px;
+    line-height: 1.9; max-width: 380px; opacity: .92;
+    white-space: pre-line;
+  }
+  .cta-card .arrow {
+    position: absolute; right: 36px; top: 50%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    display: grid; place-items: center;
+    transition: transform .25s ease, background .25s ease;
+    z-index: 2;
+  }
+  .cta-card:hover .arrow { transform: translateY(-50%) translateX(4px); background: rgba(255,255,255,0.35); }
+  .cta-card .arrow::after {
+    content: "→";
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 22px; color: #fff;
+  }
+
+  /* ───── FOOTER ───── */
+  .footer {
+    width: 100%;
+    padding: 52px 220px 36px;
+    display: flex; flex-direction: column; gap: 28px;
+    align-items: flex-start;
+  }
+  .footer .brand img { width: 81px; height: 53px; display: block; }
+  .footer-nav { display: flex; gap: 36px; }
+  .footer-nav a {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 12px;
+    letter-spacing: 0.07em; color: var(--ink);
+    text-decoration: none; transition: color .2s ease;
+  }
+  .footer-nav a:hover { color: var(--green-primary); }
+  .footer-copy {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 11px; letter-spacing: 0.08em; color: var(--ink);
+  }
+
+  /* ───── reveal-on-scroll ───── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.is-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ───── HINT: STARTER TIMELINE ───── */
+  .starter { width: 100%; padding: 110px 40px 120px; display: flex; flex-direction: column; align-items: center; background: #fff; }
+  .starter-timeline { position: relative; width: 100%; max-width: 1180px; margin-top: 70px; }
+  .starter-path {
+    position: absolute; left: 50%; top: 175px; transform: translateX(-50%);
+    width: 680px; height: auto; z-index: 0; opacity: .9; pointer-events: none;
+  }
+  .starter-path-sp { display: none; }
+  .starter-grid {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 540px));
+    justify-content: center; gap: 120px 80px;
+  }
+  .tip-card {
+    position: relative; border-radius: 24px;
+    background: #abd8bd; color: #fff;
+    box-shadow: 0 8px 24px rgba(58,122,54,0.1);
+    padding: 56px 40px 32px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .tip-card.is-first { background: #f6d873; }
+  .tip-cell-first { position: relative; }
+  .hakken-mark {
+    position: absolute; z-index: 2;
+    left: -18px; top: -18px;
+    width: 44px; height: 41px;
+    transform: rotate(-7deg);
+    pointer-events: none;
+  }
+  .tip-grad-bg {
+    position: absolute; z-index: 0;
+    left: 50%; top: 50%;
+    width: 556px; height: 331px; max-width: 102%;
+    transform: translate(-42%, -66%);
+    background: linear-gradient(135deg, #57b38a, #c3d974);
+    border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(58,122,54,0.12);
+  }
+  .tip-cell-first .tip-card.is-first {
+    position: relative; z-index: 1;
+    transform: translateY(10px) rotate(-7deg);
+  }
+  .tip-card.is-first .tip-badge .lv,
+  .tip-card.is-first .tip-badge .no { color: #8a6a16; }
+  .tip-card:nth-child(2) { margin-top: 230px; }
+  .tip-card:nth-child(3) { margin-top: 0; transform: translateY(-253px); }
+  .tip-card:nth-child(4) { margin-top: 90px; transform: translateY(-140px); }
+  .tip-badge {
+    position: absolute; left: 23px; top: -28px;
+    width: 70px; height: 70px; border-radius: 50%;
+    background: #fff; box-shadow: 0 0 12px rgba(74,128,64,0.25);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1;
+  }
+  .tip-badge .lv { font-family: "Zen Maru Gothic", sans-serif; font-weight: 700; font-size: 15px; color: #336b33; }
+  .tip-badge .no { font-family: "Zen Maru Gothic", sans-serif; font-weight: 700; font-size: 26px; color: #336b33; margin-top: 1px; }
+  .tip-card h3 { font-family: "Zen Maru Gothic", sans-serif; font-weight: 700; font-size: 22px; line-height: 1.5; letter-spacing: 0.04em; margin-top: 16px; text-shadow: 0 4px 4px rgba(79,167,155,0.4); }
+  .tip-card p { font-family: "Zen Maru Gothic", sans-serif; font-weight: 500; font-size: 14.5px; line-height: 2; letter-spacing: 0.04em; text-shadow: 0 4px 4px rgba(79,167,155,0.4); }
+  .tip-wave {
+    width: 114px; height: 6px; display: block; align-self: flex-start;
+    -webkit-mask: url("assets/mv-under.png") left/contain no-repeat; mask: url("assets/mv-under.png") left/contain no-repeat;
+    background: #fff;
+  }
+  .tip-meta { display: flex; flex-direction: column; gap: 12px; }
+  .tip-meta .diff { display: flex; align-items: center; gap: 12px; }
+  .diff-label { font-family: "Zen Kaku Gothic New", sans-serif; font-size: 12px; letter-spacing: 0.08em; text-shadow: 0 4px 4px rgba(79,167,155,0.4); }
+  .leaves { display: inline-flex; gap: 6px; align-items: center; }
+  .leaf {
+    position: relative;
+    width: 11px; height: 14px; display: inline-block;
+  }
+  .leaf::before, .leaf::after {
+    content: ""; position: absolute;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath d='M1.79766 11.8368C-0.448589 9.79204 -0.611895 6.31346 1.4329 4.06721L5.13534 0L9.20253 3.70246C11.4488 5.74726 11.6121 9.22584 9.56728 11.4721C7.52248 13.7183 4.0439 13.8816 1.79766 11.8368Z'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath d='M1.79766 11.8368C-0.448589 9.79204 -0.611895 6.31346 1.4329 4.06721L5.13534 0L9.20253 3.70246C11.4488 5.74726 11.6121 9.22584 9.56728 11.4721C7.52248 13.7183 4.0439 13.8816 1.79766 11.8368Z'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+  /* white outline */
+  .leaf::before { inset: -0.8px; background: #fff; }
+  /* fill */
+  .leaf::after { inset: 0; background: rgba(255,255,255,0.45); }
+  .leaf.on::after { background: linear-gradient(135deg, #57b38a, #c3d974); }
+  .tip-card.is-first .leaf::after { background: rgba(255,255,255,0.6); }
+  .tip-card.is-first .leaf.on::after { background: linear-gradient(135deg, #57b38a, #c3d974); }
+  .tip-req { font-family: "Zen Maru Gothic", sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-shadow: 0 4px 4px rgba(79,167,155,0.4); }
+
+  /* ───── HINT: DEEPER ───── */
+  .deeper-wrap { position: relative; width: 100%; background: linear-gradient(180deg, #EDFFF0 0%, #8ECEC9 100%); margin-top: 40px; }
+  .curve-top { position: absolute; top: -173px; left: 0; width: 100%; height: 174px; display: block; }
+  .sp-only-br { display: none; }
+  .curve-bottom { position: absolute; bottom: -151px; left: 0; width: 100%; height: 152px; display: block; z-index: 2; }
+  .deeper { width: 100%; max-width: 1320px; margin: 0 auto; padding: 40px 60px 120px; display: flex; flex-direction: column; align-items: center; }
+  .deeper-grid { width: 100%; max-width: 1199px; margin-top: 64px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+  .deep-card {
+    background: #fff; border-radius: 22px; box-shadow: 0 8px 24px rgba(58,122,54,0.1);
+    padding: 56px 27px 44px; display: flex; flex-direction: column; align-items: center; gap: 22px; position: relative;
+  }
+  .deep-icon {
+    position: absolute; top: -34px; left: 50%; transform: translateX(-50%);
+    width: 76px; height: 76px; border-radius: 50%;
+    background: linear-gradient(90deg, #57B38A, #C3D974);
+    display: grid; place-items: center; color: #fff;
+  }
+  .deep-icon svg { width: 32px; height: 32px; }
+  .deep-card h3 { font-family: "Zen Maru Gothic", sans-serif; font-weight: 700; font-size: 22px; line-height: 1.55; letter-spacing: 0.04em; color: #57b38a; text-align: center; margin-top: 14px; }
+  .deep-card p { font-family: "Zen Maru Gothic", sans-serif; font-weight: 500; font-size: 14px; line-height: 2; color: var(--ink); text-align: center; }
+  .deep-callout {
+    position: relative; width: 100%; max-width: 1200px; margin-top: 56px;
+    aspect-ratio: 2048 / 485;
+    display: flex; flex-direction: column; justify-content: center; gap: 14px;
+    padding: 0 60px; text-decoration: none; color: #fff;
+  }
+  .deep-callout .dc-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(rgba(28,37,71,0.74) 0%, rgba(28,37,71,0.52) 60%, rgba(87,179,138,0.48) 100%),
+      url("assets/deep-hint-img.png") center/100% 100% no-repeat;
+    -webkit-mask: url("assets/deep-hint-img.png") center/100% 100% no-repeat;
+            mask: url("assets/deep-hint-img.png") center/100% 100% no-repeat;
+    transition: filter .25s ease;
+  }
+  .deep-callout:hover .dc-bg { filter: brightness(1.12); }
+  .deep-callout .dc-body { position: relative; z-index: 1; max-width: 740px; }
+  .deep-callout .dc-eyebrow {
+    display: block;
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.18em;
+    color: #C3D974; margin-bottom: 12px;
+  }
+  .deep-callout h3 { font-family: "Zen Maru Gothic", sans-serif; font-weight: 700; font-size: 26px; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .deep-callout p { font-family: "Zen Maru Gothic", sans-serif; font-weight: 500; font-size: 14.5px; line-height: 1.9; }
+  .deep-callout .dc-pill {
+    position: absolute; right: 60px; top: 50%; transform: translateY(-50%); z-index: 1;
+    background: #fff; color: #336b33; border-radius: 100px;
+    font-family: "Zen Maru Gothic", sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.08em;
+    padding: 18px 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    transition: transform .25s ease;
+  }
+  .deep-callout:hover .dc-pill { transform: translateY(-50%) translateX(4px); }
+
+  /* ───── HINT: SMALL STEP ───── */
+  .small-step { width: 100%; padding: 270px 40px 120px; display: flex; flex-direction: column; align-items: center; background: #fff; }
+  .step-flow-img { width: 100%; max-width: 1021px; height: auto; margin-top: 64px; display: block; }
+  .step-flow-sp { display: none; }
+
+  /* CTA card 2 (scenes) — masked dark image, hover brighten (same behavior as scene page) */
+  .cta-card.scene2 { background: transparent; box-shadow: none; }
+  .cta-card.scene2:hover { box-shadow: none; }
+  .cta-card.scene2 .cta-bg {
+    background: linear-gradient(rgba(67,81,67,0.42), rgba(67,81,67,0.42)),
+      url("assets/relate-bar05-hint.png") center/100% 100% no-repeat;
+    -webkit-mask: url("assets/relate-bar05-hint.png") center/100% 100% no-repeat;
+            mask: url("assets/relate-bar05-hint.png") center/100% 100% no-repeat;
+    transition: filter .25s ease;
+  }
+  .cta-card.scene2:hover .cta-bg { filter: brightness(1.18); }
+
+  @media (max-width: 1279px) {
+    .breadcrumb { padding: 20px 56px !important; }
+    .footer { padding: 48px 48px 32px; }
+    .small-step { padding: 230px 40px 110px; }
+  }
+
+  @media (max-width: 860px) {
+    .starter-grid { grid-template-columns: 1fr; gap: 70px; }
+    .tip-card:nth-child(2), .tip-card:nth-child(4) { margin-top: 0; }
+    .tip-card:nth-child(3), .tip-card:nth-child(4) { transform: none !important; }
+    .tip-cell-first .tip-card.is-first { transform: rotate(-3deg) !important; }
+    .tip-grad-bg { display: none !important; }
+    .hakken-mark { top: -14px; left: 6px; }
+    .starter-path { display: none; }
+    .starter-path-sp {
+      display: block;
+      position: absolute; left: 50%; top: 20px;
+      transform: translateX(-50%);
+      width: auto; height: calc(100% - 220px);
+      z-index: 0; opacity: .9; pointer-events: none;
+    }
+    .deeper-grid { grid-template-columns: 1fr; }
+    .deep-callout { padding: 40px 28px 110px; aspect-ratio: auto; min-height: 260px; }
+    .deep-callout .dc-pill { right: auto; left: 28px; top: auto; bottom: 28px; transform: none; }
+  }
+
+  @media (max-width: 767px) {
+    /* SP: unify h3 heading size */
+    h3 { font-size: 22px !important; }
+    p { font-size: 14px !important; }
+    h2 { font-size: 28px !important; }
+    /* sm nav: smaller logo, roomier tap targets */
+    .nav-brand { transform: scale(0.64); transform-origin: top left; }
+    .nav-burger { width: 58px; height: 58px; }
+    .nav-drawer { height: 560px; }
+    .nd-bar { height: 520px; }
+    .nd-close { right: 22px; top: 24px; }
+    .nd-list { gap: 26px; top: 112px; }
+    .nd-list li { height: auto; }
+    .nd-list a { flex-wrap: wrap; gap: 4px 14px; }
+    .nd-list a .ttl { font-size: 20px; }
+
+    .page-hero { height: 300px; }
+    .page-hero .bg { background-image: url("assets/sp-hint-mv.png"); background-position: center; }
+    .page-hero .wave-bottom { display: none; }
+    .page-hero .wave-bottom-sp { display: block; height: 22px; }
+    .page-hero h1 { font-size: 31px; }
+    .page-hero .eyebrow { font-size: 11px; letter-spacing: 0.5em; margin-bottom: 16px; }
+    .breadcrumb { padding: 14px 22px !important; }
+    .section-heading h2 { font-size: 27px; }
+    .starter { padding: 64px 22px; }
+    /* SP: let tip cards grow with their (re-wrapped) content instead of a fixed height */
+    .tip-card { height: auto !important; }
+    /* SP: move the hakken mark to the upper-left of the LV01 badge */
+    .hakken-mark { top: -42px; left: -10px; width: 36px; height: 34px; }
+    /* SP: bring back the gradient panel as a layered accent behind LV01 */
+    .tip-grad-bg {
+      display: block !important;
+      left: 10px; top: 30px;
+      width: 100%; height: 100%; max-width: none;
+      transform: rotate(2deg);
+    }
+    .deeper { padding: 40px 22px 90px; padding-left: 22px !important; padding-right: 22px !important; }
+    /* SP: add a little breathing room above the deeper heading */
+    .deeper .section-heading { padding-top: 24px; }
+    .sp-only-br { display: inline; }
+    .deeper-grid { gap: 42px; }
+    .deep-card { padding-top: 42px; }
+    /* SP: drop the top curve lower so it doesn't overlap the previous section */
+    .curve-top { top: -70px; height: 71px; }
+    .small-step { padding: 200px 22px 60px; }
+    .step-flow-img { margin-top: 40px; }
+    .step-flow-pc { display: none; }
+    .step-flow-sp { display: block; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .cta-section { padding: 0 22px 80px; }
+    .cta-card-wrap { padding: 56px 22px 64px; }
+    .cta-grid { grid-template-columns: 1fr; gap: 20px; margin-top: 40px; }
+    .cta-card { height: auto; min-height: 190px; padding: 36px 28px; }
+    /* SP: 自然の音を知る 導線 — match the shared scalloped wave shape */
+    .deep-callout .dc-bg {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 339' preserveAspectRatio='none'%3E%3Cpath d='M0 0H375V321.58H0Z' fill='%23fff'/%3E%3Cpath d='M375 329.1C343.75 329.1 343.75 313.11 312.5 313.11C281.25 313.11 281.25 329.1 250 329.1C218.75 329.1 218.75 313.11 187.5 313.11C156.25 313.11 156.25 329.1 125 329.1C93.75 329.1 93.75 313.11 62.5 313.11C31.25 313.11 31.25 329.1 0 329.1' stroke='%23fff' stroke-width='18' fill='none'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 339' preserveAspectRatio='none'%3E%3Cpath d='M0 0H375V321.58H0Z' fill='%23fff'/%3E%3Cpath d='M375 329.1C343.75 329.1 343.75 313.11 312.5 313.11C281.25 313.11 281.25 329.1 250 329.1C218.75 329.1 218.75 313.11 187.5 313.11C156.25 313.11 156.25 329.1 125 329.1C93.75 329.1 93.75 313.11 62.5 313.11C31.25 313.11 31.25 329.1 0 329.1' stroke='%23fff' stroke-width='18' fill='none'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+      background:
+        linear-gradient(rgba(28,37,71,0.74) 0%, rgba(28,37,71,0.52) 60%, rgba(87,179,138,0.48) 100%),
+        url("assets/sp-deep-hint-img.png") center/cover no-repeat;
+      border-radius: 24px 24px 0 0;
+    }
+    /* SP: scene2 carries a wave on PC, so it gets the shared scalloped wave; lib stays rectangular */
+    .cta-card.scene2 .cta-bg {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 339' preserveAspectRatio='none'%3E%3Cpath d='M0 0H375V321.58H0Z' fill='%23fff'/%3E%3Cpath d='M375 329.1C343.75 329.1 343.75 313.11 312.5 313.11C281.25 313.11 281.25 329.1 250 329.1C218.75 329.1 218.75 313.11 187.5 313.11C156.25 313.11 156.25 329.1 125 329.1C93.75 329.1 93.75 313.11 62.5 313.11C31.25 313.11 31.25 329.1 0 329.1' stroke='%23fff' stroke-width='18' fill='none'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 375 339' preserveAspectRatio='none'%3E%3Cpath d='M0 0H375V321.58H0Z' fill='%23fff'/%3E%3Cpath d='M375 329.1C343.75 329.1 343.75 313.11 312.5 313.11C281.25 313.11 281.25 329.1 250 329.1C218.75 329.1 218.75 313.11 187.5 313.11C156.25 313.11 156.25 329.1 125 329.1C93.75 329.1 93.75 313.11 62.5 313.11C31.25 313.11 31.25 329.1 0 329.1' stroke='%23fff' stroke-width='18' fill='none'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+      background:
+        linear-gradient(rgba(67,81,67,0.42), rgba(67,81,67,0.42)),
+        url("assets/sp-relate-bar02.png") center/cover no-repeat;
+    }
+    /* SP: move CTA arrow to top-right corner & shrink it */
+    .cta-card .arrow { right: 16px; top: 16px; transform: none; width: 34px; height: 34px; background: rgba(0,0,0,0.32); }
+    .cta-card:hover .arrow { transform: translateX(4px); background: rgba(0,0,0,0.46); }
+    .cta-card .arrow::after { font-size: 18px; }
+    .footer { padding: 40px 24px 28px; }
+    .footer-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 36px; justify-items: start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a class="nav-brand" href="index.html" aria-label="むさび">
+    <svg class="brand-blob" width="273" height="177" viewBox="0 0 273 177" fill="#fff" aria-hidden="true">
+      <path d="M 74.5 110.001 C 14 112.001 33.5 168 0 177 L 0 0 L 273 0.001 C 256.5 29.501 200 17.501 183.5 52.501 C 168.09 85.19 135 108.002 74.5 110.001 Z" />
+    </svg>
+    <img src="assets/logo.svg" alt="むさび">
+  </a>
+  <button class="nav-burger" id="navBurger" aria-label="メニューを開く" aria-expanded="false">
+    <span class="lines"><span></span><span></span><span></span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog" aria-label="グローバルメニュー">
+  <div class="nd-bar"></div>
+  <ul class="nd-list">
+    <li><a href="about.html" data-close><span class="num">01</span><span class="ttl">自然の音を知る</span><span class="sub">ABOUT NATURAL SOUNDS</span></a></li>
+    <li><a href="scenes.html" data-close><span class="num">02</span><span class="ttl">音を楽しむシーン</span><span class="sub">SCEANS</span></a></li>
+    <li><a href="library.html" data-close><span class="num">03</span><span class="ttl">音ライブラリー</span><span class="sub">SOUNDS LIBLARY</span></a></li>
+    <li><a href="tips.html" data-close><span class="num">04</span><span class="ttl">音を楽しむヒント</span><span class="sub">TIPS</span></a></li>
+  </ul>
+  <button class="nd-close" data-close aria-label="メニューを閉じる"></button>
+</div>
+
+<!-- BREADCRUMB -->
+
+<!-- HERO / MV -->
+<section class="page-hero" id="top" data-screen-label="MV">
+  <div class="bg"></div>
+  <div class="page-hero-inner" style="color: rgb(255, 255, 255)">
+    <span class="eyebrow" style="color: rgb(255, 255, 255)">TIPS</span>
+    <h1 style="color: rgb(255, 255, 255)">音を楽しむヒント</h1>
+  </div>
+  <svg class="wave-bottom" viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <path d="M 0 60 L 0 30 C 60 6 120 54 180 30 S 300 6 360 30 S 480 54 540 30 S 660 6 720 30 S 840 54 900 30 S 1020 6 1080 30 S 1200 54 1260 30 S 1380 6 1440 30 L 1440 60 Z" fill="currentColor"/>
+  </svg>
+  <svg class="wave-bottom wave-bottom-sp" viewBox="0 0 375 24" preserveAspectRatio="none">
+    <path d="M 0 20 C 31.25 20 31.25 4 62.5 4 C 93.75 4 93.75 20 125 20 C 156.25 20 156.25 4 187.5 4 C 218.75 4 218.75 20 250 20 C 281.25 20 281.25 4 312.5 4 C 343.75 4 343.75 20 375 20 L 375 24 L 0 24 Z" fill="currentColor"/>
+  </svg>
+</section>
+
+<!-- BREADCRUMB (below MV) -->
+<nav class="breadcrumb" style="padding: 0px 120px; background-color: rgb(255, 255, 255)">
+  <a href="index.html">トップ</a>
+  <span class="sep">/</span>
+  <span>音を楽しむヒント</span>
+</nav>
+
+<!-- SECTION 2: STARTER TIPS -->
+<section class="starter" id="starter" data-screen-label="すぐに試せるヒント">
+  <div class="section-heading">
+    <h2>すぐに試せるヒント</h2>
+    <span class="wave-mark"></span>
+    <p class="lede">少しだけ、耳の使い方を変えてみる。
+特別な道具も場所も要りません。手軽な順に4つ、並べました。</p>
+  </div>
+  <div class="starter-timeline">
+    <img class="starter-path" src="assets/hint-tsunagari01.png" alt="" />
+    <img class="starter-path-sp" src="assets/sp-hint-tsunagari01.png" alt="" aria-hidden="true" />
+    <div class="starter-grid">
+      <div class="tip-cell-first">
+        <span class="tip-grad-bg"></span>
+        <img class="hakken-mark" src="assets/hakken.svg" alt="" aria-hidden="true" />
+      <article class="tip-card is-first" style="background-color: rgb(171, 216, 189); height: 344px">
+        <span class="tip-badge"><span class="lv" style="color: rgb(51, 107, 51)">LV</span><span class="no" style="color: rgb(51, 107, 51)">01</span></span>
+        <h3>少しだけイヤホンを外す</h3>
+        <p>通勤・通学中、片耳だけ外してみる。これだけで、街の音や風の音がぐっと近く感じられます。「無音にする勇気」がいらないのが、いちばんはじめの一歩。</p>
+        <span class="tip-wave" style="text-align: left"></span>
+        <div class="tip-meta">
+          <div class="diff"><span class="diff-label" style="font-weight: 700">難易度</span><span class="leaves"><span class="leaf on"></span><span class="leaf" style="color: rgb(213, 235, 222)"></span><span class="leaf" style="color: rgb(213, 235, 222)"></span><span class="leaf" style="color: rgb(213, 235, 222)"></span></span></div>
+          <span class="tip-req">所要 30秒〜</span>
+        </div>
+      </article>
+      </div>
+      <article class="tip-card" style="background-color: rgb(149, 205, 171)">
+        <span class="tip-badge"><span class="lv">LV</span><span class="no">02</span></span>
+        <h3>目を閉じて音の方向を感じる</h3>
+        <p>ベンチや窓辺で、1分だけ目を閉じてみる。視覚が休まると、音の遠近や方向が不思議なほどはっきりしてきます。「どこから？」と問いかけるだけで、世界が立体になります。</p>
+        <span class="tip-wave"></span>
+        <div class="tip-meta">
+          <div class="diff"><span class="diff-label" style="font-weight: 700">難易度</span><span class="leaves"><span class="leaf on"></span><span class="leaf on"></span><span class="leaf" style="color: rgb(213, 235, 222)"></span><span class="leaf" style="color: rgb(213, 235, 222)"></span></span></div>
+          <span class="tip-req">所要 1分〜</span>
+        </div>
+      </article>
+      <article class="tip-card" style="background-color: rgb(126, 195, 153); height: 348px">
+        <span class="tip-badge"><span class="lv">LV</span><span class="no">03</span></span>
+        <h3>天気の悪い日に窓を少し開けてみる</h3>
+        <p>雨や風の日こそ、普段は聴けない音に出会えるチャンス。窓を数センチだけ開けて、室内の静けさと外の天気が重なる音を楽しんでみて。不便な日が、ちょっと特別な日に変わります。</p>
+        <span class="tip-wave"></span>
+        <div class="tip-meta">
+          <div class="diff"><span class="diff-label" style="font-weight: 700">難易度</span><span class="leaves"><span class="leaf on"></span><span class="leaf on"></span><span class="leaf on"></span><span class="leaf" style="color: rgb(213, 235, 222)"></span></span></div>
+          <span class="tip-req">所要 数分〜</span>
+        </div>
+      </article>
+      <article class="tip-card" style="background-color: rgb(103, 184, 135)">
+        <span class="tip-badge"><span class="lv">LV</span><span class="no">04</span></span>
+        <h3>季節を変えて同じ場所へ</h3>
+        <p>同じ公園でも、春と秋では聴こえる音がまるで違います。お気に入りの一場所を「定点」に決めて、月をまたいで通ってみる。変化に気づける耳が、ゆっくりと育っていきます。</p>
+        <span class="tip-wave"></span>
+        <div class="tip-meta">
+          <div class="diff"><span class="diff-label" style="font-weight: 700">難易度</span><span class="leaves"><span class="leaf on"></span><span class="leaf on"></span><span class="leaf on"></span><span class="leaf on"></span></span></div>
+          <span class="tip-req">所要 月1回〜</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: DEEPER TIPS -->
+<div class="deeper-wrap" id="deeper" data-screen-label="もう少し深く楽しむヒント">
+  <svg class="curve-top" viewBox="0 0 1440 174" preserveAspectRatio="none"><path d="M 1440 0 C 1094 131 242 -83 0 174 L 1440 174 L 1440 0 Z" fill="#EDFFF0"/></svg>
+  <section class="deeper" style="padding: 0px 60px">
+    <div class="section-heading">
+      <h2>もう少し深く<br class="sp-only-br">楽しむヒント</h2>
+      <span class="wave-mark"></span>
+      <p class="lede">慣れてきたら。少し長めの3つを。</p>
+    </div>
+    <div class="deeper-grid">
+      <article class="deep-card">
+        <span class="deep-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="3" width="10" height="17" rx="5"/><path d="M7 14a9 9 0 0 0 18 0"/><line x1="16" y1="23" x2="16" y2="28"/><line x1="11" y1="28" x2="21" y2="28"/></svg></span>
+        <h3>録音して、<br>聴き比べてみる</h3>
+        <p>スマホの録音アプリで、同じ場所の音を1週間ごとに撮ってみる。当日は気づかなかった小さな変化が、聴き比べてはじめて見えてきます。</p>
+      </article>
+      <article class="deep-card">
+        <span class="deep-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4l6 6L12 26l-7 2 2-7z"/><line x1="19" y1="7" x2="25" y2="13"/></svg></span>
+        <h3>音の変化を<br>日記に書く</h3>
+        <p>その日聴こえた音を3行だけ書きとめる。時間と場所だけでも十分。1ヶ月続けると、季節が変わった瞬間が言葉でくっきり浮かびます。</p>
+      </article>
+      <article class="deep-card">
+        <span class="deep-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="4"/><circle cx="22" cy="13" r="3.4"/><path d="M4 27c0-4 3-7 7-7s7 3 7 7"/><path d="M19 21c3 0 8 1 8 6"/></svg></span>
+        <h3>友人と一緒に聴いて<br>感想を話す</h3>
+        <p>同じ音でも、聞く人によって変わります。「雨だね」「もっと粒が大きい雨だね」人と話すことで、自分の耳にぴったりな音が探れます。</p>
+      </article>
+    </div>
+    <a class="deep-callout" href="about.html">
+      <div class="dc-bg"></div>
+      <div class="dc-body">
+        <span class="dc-eyebrow">もっと深く知りたい場合は…</span>
+        <h3 style="font-size: 30px">自然の音を知る</h3>
+        <p>紹介されている音の種類や条件の知識と組み合わせると、
+聴くたびの発見が何倍にもなります。</p>
+      </div>
+      <span class="dc-pill">自然の音を探してみる</span>
+    </a>
+  </section>
+  <svg class="curve-bottom" viewBox="0 0 1448 152" preserveAspectRatio="none"><path d="M0 139.938C352 139.938 1204 205.909 1448 0L0 0V139.938Z" fill="#8DCBC3" style="fill: rgb(142, 207, 201)"/></svg>
+</div>
+
+<!-- SECTION 4: TODAY'S SMALL STEP -->
+<section class="small-step" id="step" data-screen-label="今日からできる小さな一歩">
+  <div class="section-heading">
+    <h2>今日からできる小さな一歩</h2>
+    <span class="wave-mark"></span>
+    <p class="lede">読み終えたら、何かひとつ、やってみる。</p>
+  </div>
+  <img class="step-flow-img step-flow-pc" src="assets/hint-step-flow.png" alt="STEP1 このページを読む → STEP2 ヒントからひとつ選ぶ → STEP3 今日試してみる → GOAL ぴったりな音に出会う" />
+  <img class="step-flow-img step-flow-sp" src="assets/sp-hint-step-flow.png" alt="STEP1 このページを読む → STEP2 ヒントからひとつ選ぶ → STEP3 今日試してみる → GOAL ぴったりな音に出会う" aria-hidden="true" />
+</section>
+
+<!-- SECTION · 次のアクションへ -->
+<section class="cta-section" data-screen-label="次のアクションへ">
+  <div class="cta-card-wrap">
+    <div class="section-heading">
+      <h2>次のアクションへ</h2>
+      <span class="wave-mark"></span>
+      <p class="lede">ヒントを携えて、実際に音と出会いに行きましょう。</p>
+    </div>
+    <div class="cta-grid">
+      <a class="cta-card lib" href="library.html">
+        <div class="cta-bg"></div>
+        <div class="cta-eyebrow">SOUND LIBRARY</div>
+        <h3>音ライブラリーへ</h3>
+        <p>天気や季節に合った自然の音を、いつでも実際に聴くことができます。</p>
+        <span class="arrow"></span>
+      </a>
+      <a class="cta-card scene2" href="scenes.html">
+        <div class="cta-bg"></div>
+        <div class="cta-eyebrow">SCENES</div>
+        <h3>音を楽しむシーンへ</h3>
+        <p>日常のどんな場面で、どんな音が寄り添ってくれるのか覗いてみましょう。</p>
+        <span class="arrow"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="brand">
+    <img src="assets/logo.svg" alt="むさび" width="81" height="53" />
+  </div>
+  <nav class="footer-nav">
+    <a href="about.html">自然の音とは</a>
+    <a href="scenes.html">楽しむシーン</a>
+    <a href="library.html">音ライブラリー</a>
+    <a href="tips.html">ヒント</a>
+  </nav>
+  <div class="footer-copy">© 2026 clanptoon</div>
+</footer>
+
+<script>
+  // hamburger drawer
+  (() => {
+    const nav = document.getElementById('nav');
+    const burger = document.getElementById('navBurger');
+    const drawer = document.getElementById('navDrawer');
+    if (!nav || !burger || !drawer) return;
+    function open() {
+      nav.classList.add('is-open');
+      drawer.classList.add('is-open');
+      burger.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    function close() {
+      nav.classList.remove('is-open');
+      drawer.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+    burger.addEventListener('click', () => {
+      (nav.classList.contains('is-open') ? close : open)();
+    });
+    drawer.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
+    drawer.addEventListener('click', (e) => { if (e.target === drawer || (e.target.classList && e.target.classList.contains('nd-bar'))) close(); });
+    document.addEventListener('click', (e) => {
+      if (!nav.classList.contains('is-open')) return;
+      if (drawer.contains(e.target) || burger.contains(e.target)) return;
+      close();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  })();
+
+  // scroll-reveal
+  (() => {
+    const items = [];
+    document.querySelectorAll('.section-heading').forEach((sh) => {
+      const children = [];
+      const h2 = sh.querySelector('h2'); if (h2) children.push(h2);
+      const wave = sh.querySelector('.wave-mark'); if (wave) children.push(wave);
+      const lede = sh.querySelector('p'); if (lede) children.push(lede);
+      children.forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = (i * 220) + 'ms';
+        items.push(el);
+      });
+    });
+    document.querySelectorAll('.flow-item').forEach((el) => {
+      el.classList.add('reveal'); items.push(el);
+    });
+    document.querySelectorAll('.flowchart-wrap, .cta-card').forEach((el) => {
+      el.classList.add('reveal');
+      if (el.classList.contains('cta-card')) {
+        const grid = el.parentElement;
+        const idx = grid ? Array.from(grid.children).indexOf(el) : 0;
+        el.style.transitionDelay = (idx * 220) + 'ms';
+      }
+      items.push(el);
+    });
+    if (!('IntersectionObserver' in window)) {
+      items.forEach((el) => el.classList.add('is-in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach((el) => io.observe(el));
+  })();
+</script>
+
+<script src="assets/to-top.js"></script>
+</body>
+</html>

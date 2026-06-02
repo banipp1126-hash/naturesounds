@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自然の音を楽しもう</title>
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#e3ffe7"/>
+    <text x="50" y="58" font-size="40" font-family="serif" font-weight="700" text-anchor="middle" fill="#57b38a">音</text>
+  </svg>
+</template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Zen+Kaku+Gothic+Antique:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-primary: #57b38a;
+    --green-deep: #336b33;
+    --green-mid: #4ab35d;
+    --green-soft: #e3ffe7;       /* lighter mint */
+    --green-mask: #cde5c3;
+    --green-cta-text: #2b612e;
+    --teal: #8eceC9;
+    --blue-teal: #4fa79b;
+    --ink: #5a5a52;
+    --shadow-cta: 0 4px 22px rgba(58,122,54,0.28);
+    --shadow-cta-white: 0 4px 22px rgba(58,122,54,0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; color: #333; }
+  body {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    width: 100%;
+    min-width: 320px;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ───── NAV ───── */
+  /* ───── NAV (floating logo + hamburger + mega menu) ───── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 0;
+    z-index: 102;
+    pointer-events: none;
+  }
+  .nav-brand {
+    pointer-events: auto;
+    position: absolute; top: 0; left: -8px;
+    width: 273px; height: 177px;
+    display: block;
+    text-decoration: none;
+    z-index: 3;
+  }
+  .nav-brand .brand-blob {
+    position: absolute; left: 0; top: 0;
+    width: 273px; height: 177px;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 18px rgba(58,122,54,0.08));
+  }
+  .nav-brand img {
+    position: absolute; left: 48px; top: 14px;
+    width: 81px; height: 53px;
+    display: block;
+    pointer-events: auto;
+  }
+
+  .nav-burger {
+    pointer-events: auto;
+    position: absolute; top: 0; right: 0;
+    width: 90px; height: 90px;
+    border: 0;
+    cursor: pointer;
+    background: linear-gradient(140deg, #79c294 0%, #57B38A 60%, #4ea780 100%);
+    border-radius: 0 0 0 28px;
+    display: grid; place-items: center;
+    box-shadow: 0 8px 22px rgba(58,122,54,0.28);
+    transition: opacity .25s ease;
+    z-index: 3;
+  }
+  .nav-burger:hover { box-shadow: 0 12px 26px rgba(58,122,54,0.32); }
+  .nav.is-open .nav-burger { opacity: 0; pointer-events: none; }
+  .nav-burger .lines { position: relative; width: 30px; height: 18px; }
+  .nav-burger .lines span {
+    position: absolute; left: 0; right: 0;
+    height: 2.5px; border-radius: 4px; background: #fff;
+  }
+  .nav-burger .lines span:nth-child(1) { top: 0; }
+  .nav-burger .lines span:nth-child(2) { top: 8px; }
+  .nav-burger .lines span:nth-child(3) { top: 16px; }
+
+  /* ───── MEGA MENU (デザインデータ 厳密再現) ───── */
+  .nav-drawer {
+    pointer-events: none;
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 374px;
+    background: transparent;
+    z-index: 101;
+    overflow: hidden;
+    transform: translateY(-100%);
+    transition: transform .55s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-drawer.is-open { pointer-events: auto; transform: translateY(0); }
+  /* the rounded green gradient bar inside */
+  .nd-bar {
+    position: absolute;
+    left: -8px; right: -8px; top: -16px;
+    width: auto; height: 320px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #57B38A 0%, #C3D974 100%);
+  }
+  /* white curved blob cutout that contains the logo (from figma path) */
+  /* hide blob inside drawer because the brand blob is now persistent */
+  .nd-blob { display: none; }
+  /* items area */
+  .nd-list {
+    position: absolute;
+    left: 50%; transform: translateX(-50%); top: 47px;
+    width: min(690px, 84vw);
+    list-style: none;
+    display: flex; flex-direction: column;
+    gap: 20px;
+    z-index: 2;
+  }
+  .nd-list li {
+    display: flex; align-items: center;
+    gap: 32px;
+    height: 35px;
+  }
+  .nd-list a {
+    display: inline-flex; align-items: center;
+    gap: 32px;
+    text-decoration: none;
+    transition: transform .2s ease, opacity .2s ease;
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  .nav-drawer.is-open .nd-list a {
+    opacity: 1; transform: translateX(0);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-drawer.is-open .nd-list li:nth-child(1) a { transition-delay: .14s; }
+  .nav-drawer.is-open .nd-list li:nth-child(2) a { transition-delay: .22s; }
+  .nav-drawer.is-open .nd-list li:nth-child(3) a { transition-delay: .30s; }
+  .nav-drawer.is-open .nd-list li:nth-child(4) a { transition-delay: .38s; }
+  .nd-list a:hover { transform: translateX(6px) !important; }
+  .nd-list a .num {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 700; font-size: 13px;
+    letter-spacing: 0.77em; /* approx 10px tracking at 13px */
+    color: #fff;
+  }
+  .nd-list a .ttl {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700; font-size: 22px;
+    letter-spacing: 0.06em;
+    color: #fff;
+  }
+  .nd-list a .sub {
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    font-weight: 500; font-size: 13px;
+    letter-spacing: 0.32em;
+    color: rgba(255,255,255,0.92);
+    text-transform: uppercase;
+  }
+  /* close X — two diagonal white lines (figma: at 1368,55) */
+  .nd-close {
+    position: absolute;
+    right: 42px; left: auto; top: 53px;
+    width: 32px; height: 32px;
+    background: transparent; border: 0;
+    cursor: pointer;
+    z-index: 3;
+  }
+  .nd-close::before,
+  .nd-close::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 40px; height: 3px;
+    background: #fff; border-radius: 4px;
+    transform-origin: 50% 50%;
+  }
+  .nd-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .nd-close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  .nav-list { display: none; }
+
+  /* ───── CTAs ───── */
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 53px; padding: 0 42px;
+    border-radius: 100px;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.0875em;
+    text-decoration: none;
+    cursor: pointer;
+    border: 0;
+    box-shadow: var(--shadow-cta);
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(58,122,54,0.32); }
+  .cta:active { transform: translateY(0); }
+  .cta-primary { background: var(--green-primary); color: #fff; }
+  .cta-primary:hover { background: #4ea780; }
+  .cta-white {
+    background: #fff; color: var(--green-primary);
+    box-shadow: var(--shadow-cta-white);
+  }
+  .cta-white-dark { background: #fff; color: var(--green-primary); box-shadow: var(--shadow-cta-white); }
+
+  /* ───── HERO ───── */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 894px;
+    overflow: hidden;
+  }
+  /* MV decorative overlays — stay fixed while slides zoom */
+  .hero-overlay {
+    position: absolute;
+    pointer-events: none;
+  }
+  .hero-overlay.banner    { z-index: 2; }
+  .hero-overlay.ashirai-r,
+  .hero-overlay.ashirai-l { z-index: 1; }
+  .hero-overlay img { display: block; width: 100%; height: auto; }
+  .hero-overlay.banner {
+    top: 30px; left: 0; right: 0;
+    width: 100%;
+    height: 20vw;
+    max-height: 200px;
+    overflow: hidden;
+  }
+  .hero-overlay.banner img {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    width: 100%; height: auto;
+  }
+  .hero-overlay.ashirai-r {
+    top: 50px; right: 0;
+    width: 360px;
+  }
+  .hero-overlay.ashirai-l {
+    bottom: 44px; left: 0;
+    width: 260px;
+  }
+
+  .hero-photo {
+    position: absolute;
+    left: 0; right: 0; top: 50px;
+    height: 844px;
+    overflow: hidden;
+  }
+  .hero-inner {
+    position: relative;
+    width: 1440px; height: 100%;
+    margin: 0 auto;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .hero-slide {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center 55%;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1);
+    /* outgoing: opacity fades, transform reset is delayed until fade completes (no "snap back" visible) */
+    transition: opacity 2.6s cubic-bezier(.4,.0,.2,1), transform 0s 2.6s;
+    will-change: opacity, transform;
+  }
+  .hero-slide.is-active {
+    opacity: 1;
+    transform: scale(1.12);
+    /* incoming: keep slowly zooming during display */
+    transition: opacity 2.6s cubic-bezier(.4,.0,.2,1), transform 14s ease-out;
+  }
+  .hero-slide.s1 { background-image: url("assets/hero-img01.png"); }
+  .hero-slide.s2 { background-image: url("assets/hero-img02.png"); }
+  .hero-slide.s3 { background-image: url("assets/hero-img03.png"); }
+  .hero-slide.s4 { background-image: url("assets/hero-img04.png"); background-position: center 85%; }
+  .hero-photo::after { content: none; }
+  .hero-photo::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 40px;
+    background: #fff;
+    -webkit-mask: radial-gradient(120% 100% at 50% 100%, transparent 60%, #000 60%);
+    mask: radial-gradient(120% 100% at 50% 100%, transparent 60%, #000 60%);
+    z-index: 3;
+  }
+
+  .v-text {
+    position: absolute;
+    writing-mode: vertical-rl;
+    width: 72px;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    text-shadow:
+      0 2px 6px rgba(255,255,255,0.6),
+      0 0 30px rgba(255,255,255,0.9),
+      0 0 40px rgba(255,255,255,1);
+  }
+  .v-text.col-1 { left: 304px; top: 110px; color: var(--green-primary); }
+  .v-text.col-2 { left: 684px; top: 110px; color: var(--green-primary); }
+  .v-text.col-3 { left: 1060px; top: 111px; color: var(--green-primary); }
+
+  .hero-divider {
+    position: absolute; left: 0; right: 0; top: 892px;
+    width: 100%; height: 2px;
+    background: rgba(58,122,54,0.18);
+    overflow: hidden;
+  }
+  .hero-divider .hero-progress {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #57B38A 0%, #C3D974 100%);
+    will-change: width;
+  }
+    background: rgba(58,122,54,0.5);
+  }
+  .wave-decor { position: absolute; pointer-events: none; }
+  .hero-wave-1 { left: 1180px; top: 195px; opacity: .9; }
+  .hero-wave-2 { left: 30px; top: 700px; opacity: .8; transform: rotate(180deg); }
+
+  /* slider progress UI removed — progress shown on .hero-divider */
+
+  /* ───── SECTION HEADINGS ───── */
+  .section-heading {
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    margin: 0 auto;
+  }
+  .section-heading h2 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: var(--green-primary);
+    white-space: pre-line;
+  }
+  /* Intro heading: solid dark green per figma */
+  .section-heading h2.intro-heading {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    color: #1e3e1c;
+  }
+  /* Per-line gradient (used by the intro heading's second line) */
+  .section-heading h2 .line-1,
+  .section-heading h2 .line-2 { display: block; }
+  .section-heading h2 span.is-gradient {
+    background: linear-gradient(90deg, #57B38A 0%, #C3D974 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  /* Gradient heading used on the three named sections */
+  .section-heading h2.is-gradient {
+    background: linear-gradient(90deg, #57B38A 0%, #C3D974 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .section-heading .wave-mark {
+    width: 118px; height: 10px;
+    background: url("assets/mv-under.png") center/contain no-repeat;
+  }
+  .section-heading .wave-mark > * { display: none; }
+  .section-heading p.lede {
+    margin-top: 18px;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 2;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+  .section-heading p.lede-light {
+    margin-top: 4px;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-weight: 300;
+    font-size: 15.2px;
+    line-height: 2;
+    color: var(--ink);
+  }
+
+  /* ───── INTRO SECTION ───── */
+  .intro {
+    width: 1440px;
+    padding: 120px 120px;
+    display: flex; flex-direction: column; align-items: center; gap: 44px;
+  }
+
+  /* ───── SCENES SECTION ───── */
+  .scenes-wrap { position: relative; width: 100%; }
+  .scenes {
+    position: relative;
+    width: 100%;
+    background: var(--green-soft);
+    padding: 92px 180px 96px;
+    display: flex; flex-direction: column; align-items: center; gap: 60px;
+  }
+  .scenes-wrap .curve-top,
+  .scenes-wrap .curve-bottom { display: block; width: 100%; color: var(--green-soft); }
+  .scenes-wrap .curve-top { margin-bottom: -1px; }
+  .scenes-wrap .curve-bottom { margin-top: -1px; transform: scaleY(-1) scaleX(-1); }
+
+  .scene-list {
+    width: 1080px;
+    display: flex; flex-direction: column; gap: 60px;
+    margin-top: 8px;
+    position: relative;
+  }
+  .scene-list::before {
+    content: "";
+    position: absolute;
+    left: 50%; top: 200px; bottom: 200px;
+    transform: translateX(-50%);
+    width: 503px;
+    background: url('assets/tsunagari.png') center top / 100% 100% no-repeat;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .scene-list .scene { position: relative; z-index: 1; }
+  .scene-path-sp { display: none; }
+  .scene {
+    position: relative;
+    width: 1080px;
+    display: grid;
+    grid-template-columns: 553px 1fr;
+    grid-column-gap: 60px;
+    align-items: center;
+  }
+  .scene.is-reverse { grid-template-columns: 1fr 553px; }
+  .scene.is-reverse .scene-media { grid-column: 2; grid-row: 1; }
+  .scene.is-reverse .scene-text  { grid-column: 1; grid-row: 1; padding-left: 0; padding-right: 30px; }
+
+  /* rectangular curved blob mask, derived from Vector-2.svg */
+  .scene-blob {
+    position: relative;
+    width: 553px; height: 404px;
+    background-size: cover;
+    background-position: center;
+  }
+  .scene.is-reverse .scene-blob { transform: scaleX(-1); }
+  .scene.is-tilt .scene-blob   { transform: rotate(-15deg) scaleX(0.92); transform-origin: 50% 50%; }
+
+  .scene-blob.bg-morning { background-image: url("assets/scean-img01.png"); }
+  .scene-blob.bg-park    { background-image: url("assets/scean-img02.png"); background-size: contain; background-repeat: no-repeat; }
+  .scene-blob.bg-evening { background-image: url("assets/scean-img03.png"); }
+
+  .scene-media { position: relative; }
+
+  .scene-text {
+    display: flex; flex-direction: column; gap: 16px;
+    padding-right: 60px;
+  }
+  .scene-text h3 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.75;
+    letter-spacing: 0.05em;
+    color: var(--green-primary);
+  }
+  .scene-text p {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 2;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+
+  /* Speech-bubble tags floating around scenes */
+  .bubble {
+    position: absolute;
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 47px; padding: 0 24px;
+    border-radius: 100px;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.15em;
+    line-height: 1;
+    border: 2px solid #fff;
+    z-index: 2;
+    white-space: nowrap;
+    box-shadow: 0 6px 18px rgba(58,122,54,0.12);
+  }
+  .bubble.fill {
+    background: var(--green-primary); color: #fff;
+    border-color: #fff;
+  }
+  .bubble.outline {
+    background: #fff; color: var(--blue-teal);
+    border-color: var(--blue-teal);
+  }
+  /* trailing dots that point from the bubble down toward the photo */
+  .bubble::before, .bubble::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: inherit;
+    border: inherit;
+  }
+  .bubble.fill::before, .bubble.outline::before {
+    width: 13px; height: 13px;
+    right: 28px; bottom: -16px;
+  }
+  .bubble.fill::after, .bubble.outline::after {
+    width: 10px; height: 10px;
+    right: 14px; bottom: -28px;
+  }
+
+  /* scene decoration icons */
+  .scene .scene-icon {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .scene .scene-icon.s1 {
+    top: -10px; right: 80px;
+    width: 110px; height: auto;
+  }
+  .scene .scene-icon.s2 {
+    top: 60px; left: 0;
+    width: 120px; height: auto;
+  }
+  .scene .scene-icon.s3 {
+    right: 60px; bottom: 20px;
+    width: 170px; height: auto;
+  }
+
+  /* mirror dot positions onto the left side */
+  .bubble.dots-left::before {
+    right: auto; left: 28px;
+  }
+  .bubble.dots-left::after {
+    right: auto; left: 14px;
+  }
+
+  /* tag positions per scene */
+  .tags-scene-1 .bubble.b1 { left: 30px;  top: -14px;  }  /* 鳥のさえずり (filled green) */
+  .tags-scene-1 .bubble.b2 { left: -30px; top: 56px;  }   /* 風の音 (outlined) */
+
+  .tags-scene-2 .bubble.b1 { left: 170px; top: -60px; } /* 遠くの子供の声 (filled green) */
+  .tags-scene-2 .bubble.b2 { left: 380px; top: -10px; } /* 葉の揺れる音 (outlined) */
+
+  .tags-scene-3 .bubble.b1 { left: 150px; top: -30px; } /* 夕風 (filled green, dots-left) */
+  .tags-scene-3 .bubble.b2 { left: 60px;  top: 24px;  } /* 虫の声 (outlined) */
+
+  /* ───── LIBRARY SECTION ───── */
+  .library {
+    position: relative;
+    width: 1440px;
+    padding: 100px 120px 80px;
+    background: #fff;
+    display: flex; flex-direction: column; align-items: center; gap: 56px;
+  }
+  .library-grid {
+    width: 1198px;
+    display: grid; grid-template-columns: repeat(3, 356px);
+    gap: 65px;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+  .lib-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 24px; cursor: pointer; }
+  .lib-photo { position: relative; width: 356px; height: 293px; }
+  .lib-photo .blob {
+    position: absolute; inset: 0;
+    background-size: contain; background-position: center; background-repeat: no-repeat;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .lib-card:hover .blob { transform: scale(1.04); }
+  .lib-photo .tint { display: none; }
+
+  .lib-card.flip .blob { /* removed: PNGs already have their own shape */ }
+
+  .lib-photo .play-fab {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 72px; height: 72px;
+    transform: translate(-50%, -50%) scale(.85);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    display: grid; place-items: center;
+    color: var(--green-primary);
+    opacity: 0;
+    transition: opacity .25s ease, transform .25s ease;
+    border: 0;
+    cursor: pointer;
+  }
+  .lib-card:hover .play-fab,
+  .lib-card.is-playing .play-fab { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .play-fab svg { width: 26px; height: 26px; }
+  .play-fab .i-pause { display: none; }
+  .lib-card.is-playing .play-fab { background: var(--green-primary); color: #fff; }
+  .lib-card.is-playing .play-fab .i-play { display: none; }
+  .lib-card.is-playing .play-fab .i-pause { display: block; }
+
+  .lib-card h3 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--green-primary);
+  }
+
+  .doodle { position: absolute; pointer-events: none; }
+
+  /* ───── HINTS SECTION ───── */
+  .hints-wrap { position: relative; width: 1440px; background: #fff; padding: 18px 64px 0; margin: 0 auto; }
+  .hints {
+    position: relative;
+    width: 1312px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #EDFFF0 0%, #8ECEC9 100%);
+    padding: 100px 56px 80px;
+    display: flex; flex-direction: column; align-items: center; gap: 56px;
+  }
+  .hint-grid {
+    width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 56px auto;
+    gap: 22px 22px;
+    margin-top: 12px;
+    align-items: start;
+  }
+  .hint-card {
+    position: relative;
+    grid-row: 1 / span 2;
+    border-radius: 20px;
+    color: #fff;
+    padding: 42px 28px 36px;
+    min-height: 285px;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    box-shadow: 0 8px 24px rgba(58,122,54,0.12);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  /* staggered vertical positions to match figma */
+  .hint-card:nth-child(1) { margin-top:  0px; background: rgba(87, 179, 138, 0.55); }
+  .hint-card:nth-child(2) { margin-top: 56px; background: rgba(87, 179, 138, 0.70); }
+  .hint-card:nth-child(3) { margin-top: 20px; background: rgba(87, 179, 138, 0.83); }
+  .hint-card:nth-child(4) { margin-top: 76px; background: rgba(87, 179, 138, 1); }
+  .hint-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(58,122,54,0.22); }
+  /* sparkle accent at top-right of the number bubble */
+  .hint-card .sparkle {
+    position: absolute;
+    width: 30px; height: 26px;
+    top: -48px;
+    left: calc(50% + 14px);
+    pointer-events: none;
+  }
+  .hint-card .num-bubble {
+    position: absolute;
+    left: 50%; top: -28px;
+    transform: translateX(-50%);
+    width: 59px; height: 56px;
+    border-radius: 9999px;
+    background: #fff;
+    color: #336b33;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    display: grid; place-items: center;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .hint-card h3 {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    margin-top: 6px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(74,128,64,0.25);
+  }
+  .hint-card p {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500;
+    font-size: 14.5px;
+    line-height: 2;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.78);
+    white-space: pre-line;
+    text-shadow: 0 4px 4px rgba(79, 167, 155, 0.4);
+  }
+
+  /* ───── FOOTER ───── */
+  .footer {
+    width: 1440px;
+    padding: 52px 220px 36px;
+    display: flex; flex-direction: column; gap: 28px;
+    align-items: flex-start;
+  }
+  .footer .brand img { width: 81px; height: 53px; display: block; }
+  .footer-nav { display: flex; gap: 36px; }
+  .footer-nav a {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.07em;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+  .footer-nav a:hover { color: var(--green-primary); }
+  .footer-copy {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+  }
+
+  /* sound bars used in playing state */
+  .sound-bars {
+    display: flex; align-items: flex-end; gap: 3px; height: 22px;
+  }
+  .sound-bars span {
+    width: 4px; height: 6px;
+    background: var(--green-primary);
+    border-radius: 2px;
+    animation: bar 1s ease-in-out infinite;
+  }
+  .sound-bars span:nth-child(2) { animation-delay: .12s; }
+  .sound-bars span:nth-child(3) { animation-delay: .24s; }
+  .sound-bars span:nth-child(4) { animation-delay: .36s; }
+  @keyframes bar { 0%, 100% { height: 6px; } 50% { height: 22px; } }
+
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .v-text { animation: float 6s ease-in-out infinite; }
+  .v-text.col-1 { animation-delay: 0s; }
+  .v-text.col-2 { animation-delay: 1.2s; }
+  .v-text.col-3 { animation-delay: 2.4s; }
+
+  /* ───── reveal-on-scroll ───── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 2.4s cubic-bezier(.2,.7,.2,1), transform 2.4s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.is-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ============================================================
+     RESPONSIVE  ·  lg ≥1280 / md 768–1279 / sm 320–767
+     Base rules above are the 1440 design; below makes it fluid.
+     ============================================================ */
+
+  /* fluid down to fit any width ≤1440 (covers lg 1280–1439 too) */
+  @media (max-width: 1440px) {
+    .intro, .library, .hints-wrap, .footer { width: 100%; }
+    .hero-inner { width: 100%; }
+    .library-grid { width: 100%; max-width: 1198px; }
+    .hints { width: 100%; max-width: 1312px; }
+    .hint-grid { width: 100%; max-width: 1200px; }
+    .scene-list { width: 100%; max-width: 1080px; }
+    .scene { width: 100%; max-width: 1080px; }
+    /* vertical hero text → percentage anchors so it scales with width */
+    .v-text { font-size: clamp(40px, 5vw, 72px); }
+    .v-text.col-1 { left: 21.1%; }
+    .v-text.col-2 { left: 47.5%; }
+    .v-text.col-3 { left: 73.6%; }
+    .hero-wave-1 { left: auto; right: 4%; }
+    .hero-wave-2 { left: 2%; }
+  }
+
+  /* ── md : 768–1279 ── */
+  @media (max-width: 1279px) {
+    .intro { padding: 90px 48px; }
+    .library { padding: 80px 48px 64px; }
+    .hints-wrap { padding: 18px 40px 0 !important; }
+    .hints { padding: 80px 40px 64px; }
+    .footer { padding: 48px 48px 32px; }
+    .scenes { padding: 80px 48px 84px; }
+
+    /* library 3 → 2 columns */
+    .library-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 40px; justify-content: center; }
+    .lib-photo { width: 100%; max-width: 356px; height: auto; aspect-ratio: 356 / 293; margin: 0 auto; }
+
+    /* hints 4 → 2 columns, drop the figma stagger */
+    .hint-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; gap: 28px; }
+    .hint-card { grid-row: auto !important; margin-top: 0 !important; }
+
+    /* scenes: keep PC 2-column layout from 768px, image scales to fit */
+    .scene { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-column-gap: 36px; }
+    .scene.is-reverse { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .scene-blob { width: 100%; max-width: 553px; height: auto; aspect-ratio: 553 / 404; }
+    .scene-text { padding-right: 0; }
+    .scene.is-reverse .scene-text { padding-right: 0; }
+    /* PC-tuned floating tags/icons don't fit the scaled image at this range */
+    .scene .scene-icon { display: none; }
+    .scene-media .bubble { display: none; }
+
+    .hero { height: 760px; }
+    .v-text { font-size: clamp(38px, 5.2vw, 60px); }
+  }
+
+  /* ── sm : 320–767 ── */
+  @media (max-width: 767px) {
+    /* SP: unify h3 heading size */
+    h3 { font-size: 22px !important; }
+    p { font-size: 14px !important; }
+    h2 { font-size: 28px !important; }
+    /* sm nav: smaller logo, roomier tap targets */
+    .nav-brand { transform: scale(0.64); transform-origin: top left; }
+    .nav-drawer { height: 560px; }
+    .nd-bar { height: 520px; }
+    .nd-close { right: 22px; top: 24px; }
+    .nd-list { gap: 26px; top: 112px; }
+    .nd-list li { height: auto; }
+    .nd-list a { flex-wrap: wrap; gap: 4px 14px; }
+    .nd-list a .ttl { font-size: 20px; }
+
+    .intro { padding: 64px 22px; gap: 28px; }
+    .library { padding: 64px 22px 48px; gap: 40px; }
+    .hints-wrap { padding: 12px 10px 0 !important; }
+    .hints { padding: 52px 14px 44px; gap: 40px; border-radius: 16px; }
+    .footer { padding: 40px 24px 28px; }
+    .footer-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 36px; justify-items: start; }
+    /* SP: always show the play mark (no hover to reveal it) */
+    .lib-photo .play-fab { opacity: 1 !important; transform: translate(-50%, -50%) scale(1) !important; }
+    /* SP: tighten gap between library image and title */
+    .lib-card { gap: 10px; }
+    .scenes { padding: 56px 16px 56px; overflow-x: clip; }
+    html, body { overflow-x: hidden; }
+
+    .section-heading h2 { font-size: 27px; }
+
+    /* single column everywhere */
+    .library-grid { grid-template-columns: 1fr; gap: 44px; }
+    .hint-grid { grid-template-columns: 1fr; gap: 60px; }
+    .hint-card { padding: 38px 22px 32px; }
+    .hint-card h3 { white-space: normal; }
+    /* 音を楽しむシーン — mobile layout (per mock) */
+    .scene-list { position: relative; gap: 48px; max-width: 360px; margin: 0 auto; }
+    .scene-list::before { display: none; }
+    .scene-path-sp {
+      display: block; position: absolute;
+      left: 50%; top: 70px; transform: translateX(-50%);
+      width: 78%; height: calc(100% - 150px);
+      opacity: .85; z-index: 0; pointer-events: none;
+    }
+    .scene { display: flex; flex-direction: column; align-items: center; z-index: 1; }
+    .scene-text { display: contents; }
+    .scene-media { order: 1; position: relative; width: 100%; max-width: 252px; margin: 0 auto; }
+    .scene-text h3 { order: 2; margin-top: 0; margin-bottom: 0; text-align: center; line-height: 1.3; }
+    .scene-text p { order: 3; margin-top: 0; text-align: center; }
+    .scene-blob {
+      width: 100% !important; height: 207px !important;
+      max-width: none; border-radius: 28px;
+      background-size: contain !important;
+      background-repeat: no-repeat !important;
+      background-position: center !important;
+      transform: none !important;
+    }
+    /* sound-tag pills overlapping the circle */
+    .scene-media .bubble { display: inline-flex !important; position: absolute; z-index: 2; }
+    .scene-media .bubble {
+      font-size: 12px; height: 32px; padding: 0 14px;
+      letter-spacing: 0.06em; border-width: 1.5px;
+    }
+    .scene-media .bubble.fill::before, .scene-media .bubble.outline::before {
+      width: 9px; height: 9px; right: 18px; bottom: -11px;
+    }
+    .scene-media .bubble.fill::after, .scene-media .bubble.outline::after {
+      width: 6px; height: 6px; right: 9px; bottom: -19px;
+    }
+    .scene-media .bubble.dots-left::before { right: auto; left: 18px; }
+    .scene-media .bubble.dots-left::after  { right: auto; left: 9px; }
+    .scene-media .bubble.b1 { left: -16px !important; top: 20px !important; right: auto !important; bottom: auto !important; }
+    .scene-media .bubble.b2 { right: -16px !important; top: 86px !important; left: auto !important; bottom: auto !important; }
+    /* scene 1: move 風の音 to the left edge of the image */
+    .tags-scene-1 .bubble.b2 { left: -16px !important; right: auto !important; top: 72px !important; }
+    /* scene 2: move 遠くの子供の声 to the right edge of the image */
+    .tags-scene-2 .bubble.b1 { right: 4px !important; left: auto !important; top: 20px !important; }
+    /* scene 3: 虫の声 to the left edge, 夕風 a bit more right */
+    .tags-scene-3 .bubble.b2 { left: -16px !important; right: auto !important; top: 62px !important; }
+    .tags-scene-3 .bubble.b1 { left: 40px !important; right: auto !important; top: 18px !important; }
+    /* scene decoration icons on SP */
+    .scene .scene-icon { display: block !important; height: auto; z-index: 3; }
+    .scene .scene-icon.s1 { left: calc(50% + 78px) !important; right: auto !important; top: -6px !important; bottom: auto !important; width: 56px !important; transform: rotate(27.68deg); }
+    .scene .scene-icon.s2 { right: calc(50% + 78px) !important; left: auto !important; top: -6px !important; bottom: auto !important; width: 58px !important; transform: rotate(-24.5deg); }
+    .scene .scene-icon.s3 { right: 4px !important; left: auto !important; bottom: -36px !important; top: auto !important; width: 80px !important; }
+    /* room so the s3 icon doesn't collide with the CTA below */
+    .scene-list { margin-bottom: 14px; }
+
+    /* hero: shrink, drop side decorations */
+    .hero { height: 64vh; min-height: 460px; }
+    .hero-overlay.ashirai-r, .hero-overlay.ashirai-l, .wave-decor { display: none; }
+    .v-text { font-size: clamp(36px, 10vw, 52px); width: auto; }
+    /* center the 3 vertical columns as a group at any SP width */
+    .hero-inner {
+      display: flex; justify-content: center; align-items: flex-start;
+      gap: clamp(44px, 18vw, 110px); padding-top: 72px;
+    }
+    .v-text { position: static !important; left: auto !important; right: auto !important; top: auto !important; }
+
+    .nav-burger { width: 58px; height: 58px; }
+
+    /* white wave decoration — full-bleed from the very top, wavy bottom lowered */
+    .hero-overlay.banner { top: 0; height: 48vw; max-height: 320px; }
+    .hero-overlay.banner img { width: 172%; left: -36%; right: auto; }
+
+    /* mobile (portrait) hero photos */
+    .hero-photo { top: 0; height: 100%; }
+    .hero-slide { transform-origin: center bottom; }
+    .hero-slide.s1 { background-image: url("assets/sp-hero-img01.png"); background-position: center; }
+    .hero-slide.s2 { background-image: url("assets/sp-hero-img02.png"); background-position: center; }
+    .hero-slide.s3 { background-image: url("assets/sp-hero-img03.png"); background-position: center bottom; }
+    .hero-slide.s4 { background-image: url("assets/sp-hero-img04.png"); background-position: center bottom; }
+
+    /* shrink library doodle icons on mobile */
+    .lib-card .doodle { transform: scale(0.6); }
+    /* SP: fine-tune doodle icon positions */
+    .library-grid .lib-card:nth-child(1) .doodle { left: -16px !important; top: -14px !important; }
+    .library-grid .lib-card:nth-child(2) .doodle { top: -48px !important; }
+    .library-grid .lib-card:nth-child(3) .doodle { bottom: 12px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Reusable SVG defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- "clanptoon" logo: stylized leaf-cloud with a bird sweep + accent -->
+    <symbol id="brandmark" viewBox="0 0 81 53">
+      <!-- soft leaf/cloud base -->
+      <path d="M 8 28 C 6 16, 14 6, 26 6 C 32 6, 38 9, 42 14 C 47 8, 56 8, 60 14 C 68 12, 74 18, 73 26 C 78 28, 78 36, 72 38 C 68 44, 58 46, 50 42 C 44 48, 30 48, 24 42 C 14 44, 4 38, 8 28 Z"
+            fill="#7ab870"/>
+      <!-- bird sweep -->
+      <path d="M 44 18 C 50 12, 60 14, 66 22 C 64 30, 56 34, 46 30 C 44 26, 42 22, 44 18 Z"
+            fill="#3a7a36"/>
+      <!-- leaf vein -->
+      <path d="M 50 22 L 32 30" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="wave-line" viewBox="0 0 120 16" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 4 8 Q 19 0 34 8 T 64 8 T 94 8 T 116 8"/>
+    </symbol>
+
+    <symbol id="play" viewBox="0 0 24 24">
+      <path d="M 7 4 L 20 12 L 7 20 Z" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a class="nav-brand" href="#top" aria-label="自然の音を楽しもう">
+    <svg class="brand-blob" width="273" height="177" viewBox="0 0 273 177" fill="#fff" aria-hidden="true">
+      <path d="M 74.5 110.001 C 14 112.001 33.5 168 0 177 L 0 0 L 273 0.001 C 256.5 29.501 200 17.501 183.5 52.501 C 168.09 85.19 135 108.002 74.5 110.001 Z" />
+    </svg>
+    <img src="assets/logo.svg" alt="自然の音を楽しもう">
+  </a>
+  <button class="nav-burger" id="navBurger" aria-label="メニューを開く" aria-expanded="false">
+    <span class="lines"><span></span><span></span><span></span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog" aria-label="グローバルメニュー">
+  <!-- green gradient bar -->
+  <div class="nd-bar"></div>
+  <!-- white curved blob containing the logo space -->
+  <svg class="nd-blob" width="273" height="177" viewBox="0 0 273 177" fill="#fff" aria-hidden="true">
+    <path d="M 74.5 110.001 C 14 112.001 33.5 168 0 177 L 0 0 L 273 0.001 C 256.5 29.501 200 17.501 183.5 52.501 C 168.09 85.19 135 108.002 74.5 110.001 Z" />
+  </svg>
+  <ul class="nd-list">
+    <li>
+      <a href="about.html" data-close>
+        <span class="num">01</span><span class="ttl">自然の音を知る</span><span class="sub">ABOUT NATURAL SOUNDS</span>
+      </a>
+    </li>
+    <li>
+      <a href="scenes.html" data-close>
+        <span class="num">02</span><span class="ttl">音を楽しむシーン</span><span class="sub">SCEANS</span>
+      </a>
+    </li>
+    <li>
+      <a href="library.html" data-close>
+        <span class="num">03</span><span class="ttl">音ライブラリー</span><span class="sub">SOUNDS LIBLARY</span>
+      </a>
+    </li>
+    <li>
+      <a href="tips.html" data-close>
+        <span class="num">04</span><span class="ttl">音を楽しむヒント</span><span class="sub">TIPS</span>
+      </a>
+    </li>
+  </ul>
+  <button class="nd-close" data-close aria-label="メニューを閉じる"></button>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-photo" id="heroSlider">
+    <div class="hero-slide s1 is-active"></div>
+    <div class="hero-slide s2"></div>
+    <div class="hero-slide s3"></div>
+    <div class="hero-slide s4"></div>
+  </div>
+
+  <div class="hero-overlay banner"><img src="assets/mv-banner.png" alt="" /></div>
+  <div class="hero-overlay ashirai-r"><img src="assets/mv-ashirai-r.png" alt="" /></div>
+  <div class="hero-overlay ashirai-l"><img src="assets/mv-ashirai-l.png" alt="" /></div>
+
+  <div class="hero-inner">
+    <div class="v-text col-1">聴こえてくる<span style="font-family:'Zen Kaku Gothic New';">。</span></div>
+    <div class="v-text col-2">自然の音が<span style="font-family:'Zen Maru Gothic';">、</span></div>
+    <div class="v-text col-3">耳をすますと</div>
+  </div>
+
+  <div class="hero-divider"><span class="hero-progress" id="heroProgress"></span></div>
+</section>
+
+<!-- INTRO -->
+<section class="intro" id="intro">
+  <div class="section-heading">
+    <h2><span class="line-1">いつもの景色には、</span><span class="line-2 is-gradient">まだ聴こえていない音がある。</span></h2>
+    <svg class="wave-mark"><use href="#wave-line"/></svg>
+    <p class="lede">川・鳥・風・雨——
+私たちのまわりには、無数の音が溢れています。
+少し意識を向けるだけで、日常がやさしく変わります。</p>
+  </div>
+  <a class="cta cta-primary" href="about.html">音を探してみる</a>
+</section>
+
+<!-- SCENES -->
+<div class="scenes-wrap" id="scenes">
+  <svg class="curve-top" viewBox="0 0 1440 152" preserveAspectRatio="none" width="1440" height="152">
+    <path d="M 0 39 C 380 110 1060 110 1440 39 L 1440 152 L 0 152 Z" fill="currentColor"/>
+  </svg>
+
+  <section class="scenes">
+    <div class="section-heading">
+      <h2 class="is-gradient">音を楽しむシーン</h2>
+      <svg class="wave-mark"><use href="#wave-line"/></svg>
+      <p class="lede-light" style="font-size: 16px; font-family: &quot;Zen Maru Gothic&quot;; font-weight: 500">日常のどんな場面でも、自然の音は寄り添ってくれます。</p>
+    </div>
+
+    <div class="scene-list">
+      <img class="scene-path-sp" src="assets/sp-tsunagari.png" alt="" aria-hidden="true" />
+
+      <!-- Scene 1: 朝の目覚めに -->
+      <article class="scene">
+        <img class="scene-icon s1" src="assets/scean-icon01.png" alt="" />
+        <div class="scene-media tags-scene-1">
+          <div class="scene-blob bg-morning"></div>
+          <span class="bubble fill b1">鳥のさえずり</span>
+          <span class="bubble outline b2">風の音</span>
+        </div>
+        <div class="scene-text">
+          <h3>朝の目覚めに</h3>
+          <p>アラームの代わりに、鳥のさえずりで一日をスタート。
+ベランダに出て深呼吸するだけで、心が整います。</p>
+        </div>
+      </article>
+
+      <!-- Scene 2: 公園のベンチで -->
+      <article class="scene is-reverse">
+        <img class="scene-icon s2" src="assets/scean-icon02.png" alt="" />
+        <div class="scene-media tags-scene-2">
+          <div class="scene-blob bg-park"></div>
+          <span class="bubble fill b1">遠くの子供の声</span>
+          <span class="bubble outline b2 dots-left">葉の揺れる音</span>
+        </div>
+        <div class="scene-text">
+          <h3>公園のベンチで</h3>
+          <p>ランチタイムに公園へ。
+スマホをしまって、周りの音に耳をすませてみてください。
+それだけで午後が変わります。</p>
+        </div>
+      </article>
+
+      <!-- Scene 3: 夕方帰り道で -->
+      <article class="scene is-tilt">
+        <img class="scene-icon s3" src="assets/scean-icon03.png" alt="" />
+        <div class="scene-media tags-scene-3">
+          <div class="scene-blob bg-evening"></div>
+          <span class="bubble fill b1 dots-left" style="padding: 0px 24px">夕風</span>
+          <span class="bubble outline b2">虫の声</span>
+        </div>
+        <div class="scene-text">
+          <h3>夕方帰り道で</h3>
+          <p>家路を急ぐ前にひと呼吸。
+夕暮れの虫の声や風が、一日のリセットを手伝ってくれます。</p>
+        </div>
+      </article>
+    </div>
+
+    <a class="cta cta-white" href="scenes.html">もっと見る</a>
+  </section>
+
+  <svg class="curve-bottom" viewBox="0 0 1440 152" preserveAspectRatio="none" width="1440" height="152">
+    <path d="M 0 39 C 380 110 1060 110 1440 39 L 1440 152 L 0 152 Z" fill="currentColor"/>
+  </svg>
+</div>
+
+<!-- LIBRARY -->
+<section class="library" id="library">
+  <div class="section-heading">
+    <h2 class="is-gradient">音ライブラリー</h2>
+    <svg class="wave-mark"><use href="#wave-line"/></svg>
+    <p class="lede">気分や場面から、聴きたい自然の音を探してみましょう。</p>
+  </div>
+
+  <div class="library-grid">
+
+    <div class="lib-card" data-name="春の森の朝" data-audio="assets/library-list09.mp3">
+      <div class="lib-photo">
+        <div class="blob" style="background-image:url('assets/top-lib01.png');"></div>
+        <button class="play-fab" aria-label="Play 春の森の朝"><svg class="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4 L20 12 L7 20 Z"/></svg><svg class="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
+      <h3>森の朝</h3>
+      <div class="doodle" style="left:-26px; top:8px;">
+        <img src="assets/top-lib-icon01.png" alt="" width="120" />
+      </div>
+    </div>
+
+    <div class="lib-card" data-name="雨の日の川" data-audio="assets/library-list03.mp3" data-volume="0.6">
+      <div class="lib-photo">
+        <div class="blob" style="background-image:url('assets/top-lib02.png');"></div>
+        <button class="play-fab" aria-label="Play 雨の日の川"><svg class="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4 L20 12 L7 20 Z"/></svg><svg class="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
+      <h3>雨の日の川</h3>
+      <div class="doodle" style="right:8px; top:-12px;">
+        <img src="assets/top-lib-icon02.png" alt="" width="78" />
+      </div>
+    </div>
+
+    <div class="lib-card" data-name="夏の風" data-audio="assets/library-list17.mp3">
+      <div class="lib-photo">
+        <div class="blob" style="background-image:url('assets/top-lib03.png');"></div>
+        <button class="play-fab" aria-label="Play 夏の風"><svg class="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4 L20 12 L7 20 Z"/></svg><svg class="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
+      <h3>夏の風</h3>
+      <div class="doodle" style="right:-12px; bottom:48px;">
+        <img src="assets/top-lib-icon03.png" alt="" width="140" />
+      </div>
+    </div>
+  </div>
+
+  <a class="cta cta-primary" href="library.html">探してみる</a>
+</section>
+
+<!-- HINTS -->
+<div class="hints-wrap" id="hints" style="padding: 1px 64px 0px">
+  <section class="hints">
+    <div class="section-heading">
+      <h2 class="is-gradient">音を楽しむヒント</h2>
+      <svg class="wave-mark"><use href="#wave-line"/></svg>
+      <p class="lede">ちょっとした工夫で、自然の音はもっと身近になります。</p>
+    </div>
+
+    <div class="hint-grid">
+      <article class="hint-card">
+        <img class="sparkle" src="assets/sparkle.svg" alt="" />
+        <div class="num-bubble">01</div>
+        <h3>少しだけイヤホンを外す</h3>
+        <p>通勤・通学中、片耳だけ外してみる。これだけで、街の音や風の音がぐっと近く感じられます。</p>
+      </article>
+      <article class="hint-card">
+        <img class="sparkle" src="assets/sparkle.svg" alt="" />
+        <div class="num-bubble">02</div>
+        <h3>目を閉じて音を感じる</h3>
+        <p>ベンチや窓辺で、1分だけ目を閉じてみる。視覚が休まると、音の遠近や方向が不思議なほどはっきりしてきます。</p>
+      </article>
+      <article class="hint-card">
+        <img class="sparkle" src="assets/sparkle.svg" alt="" />
+        <div class="num-bubble">03</div>
+        <h3>窓を少し開けてみる</h3>
+        <p>雨や風の日こそ、普段は聴けない音に出会えるチャンス。窓を数センチだけ開けて、室内の静けさと外の天気が重なる音を楽しんでみて。</p>
+      </article>
+      <article class="hint-card">
+        <img class="sparkle" src="assets/sparkle.svg" alt="" />
+        <div class="num-bubble">04</div>
+        <h3>季節を変えて同じ場所へ</h3>
+        <p>同じ公園でも、春と秋では聴こえる音がまるで違います。お気に入りの一場所を「定点」に決めて、月をまたいで通ってみる。</p>
+      </article>
+    </div>
+
+    <a class="cta cta-white-dark" href="tips.html">楽しむヒントを探る</a>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="brand">
+    <img src="assets/logo.svg" alt="むさび" width="81" height="53" />
+  </div>
+  <nav class="footer-nav">
+    <a href="about.html">自然の音とは</a>
+    <a href="scenes.html">楽しむシーン</a>
+    <a href="library.html">音ライブラリー</a>
+    <a href="tips.html">ヒント</a>
+  </nav>
+  <div class="footer-copy">© 2026 clanptoon</div>
+</footer>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (id.length > 1) {
+        const el = document.querySelector(id);
+        if (el) {
+          e.preventDefault();
+          window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 85, behavior: 'smooth' });
+        }
+      }
+    });
+  });
+
+  // hamburger drawer
+  (() => {
+    const nav = document.getElementById('nav');
+    const burger = document.getElementById('navBurger');
+    const drawer = document.getElementById('navDrawer');
+    if (!nav || !burger || !drawer) return;
+    function open() {
+      nav.classList.add('is-open');
+      drawer.classList.add('is-open');
+      burger.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    function close() {
+      nav.classList.remove('is-open');
+      drawer.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+    burger.addEventListener('click', () => {
+      (nav.classList.contains('is-open') ? close : open)();
+    });
+    drawer.querySelectorAll('[data-close]').forEach((el) => {
+      el.addEventListener('click', close);
+    });
+    drawer.addEventListener('click', (e) => { if (e.target === drawer || (e.target.classList && e.target.classList.contains('nd-bar'))) close(); });
+    document.addEventListener('click', (e) => {
+      if (!nav.classList.contains('is-open')) return;
+      if (drawer.contains(e.target) || burger.contains(e.target)) return;
+      close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  })();
+
+  // hero slider — 4 images, ~5s each, gentle fade; progress shown on .hero-divider
+  (() => {
+    const slides = document.querySelectorAll('.hero-slide');
+    const progress = document.getElementById('heroProgress');
+    const SLIDE_MS = 5000;
+    let idx = 0;
+    let timer = null;
+
+    function startProgress() {
+      if (!progress) return;
+      progress.style.transition = 'none';
+      progress.style.width = '0%';
+      // force reflow
+      void progress.offsetWidth;
+      progress.style.transition = `width ${SLIDE_MS}ms linear`;
+      progress.style.width = '100%';
+    }
+
+    function go(next) {
+      idx = (next + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+      startProgress();
+      clearTimeout(timer);
+      timer = setTimeout(() => go(idx + 1), SLIDE_MS);
+    }
+
+    // initial: strip is-active so the first transform animation can fire
+    slides.forEach((s) => s.classList.remove('is-active'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => go(0));
+    });
+  })();
+
+  // scroll-reveal: fade + rise each element when it scrolls into view
+  (() => {
+    const matchesAny = (el, sels) => sels.some((s) => el.matches(s));
+    const items = [];
+
+    // 1) Section headings — line-1 → line-2 → wave-mark → lede
+    document.querySelectorAll('.section-heading').forEach((sh) => {
+      const h2 = sh.querySelector('h2');
+      const lines = h2 ? h2.querySelectorAll('.line-1, .line-2') : [];
+      const children = [];
+      if (lines.length > 0) {
+        lines.forEach((ln) => {
+          ln.style.display = 'block';
+          children.push(ln);
+        });
+      } else if (h2) {
+        children.push(h2);
+      }
+      const wave = sh.querySelector('.wave-mark'); if (wave) children.push(wave);
+      const lede = sh.querySelector('p'); if (lede) children.push(lede);
+      children.forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = (i * 320) + 'ms';
+        items.push(el);
+      });
+    });
+
+    // 2) Scenes — image first, then text
+    document.querySelectorAll('.scene').forEach((sc) => {
+      const media = sc.querySelector('.scene-media');
+      const text  = sc.querySelector('.scene-text');
+      if (media) { media.classList.add('reveal'); media.style.transitionDelay = '0ms'; items.push(media); }
+      if (text)  { text.classList.add('reveal');  text.style.transitionDelay  = '420ms'; items.push(text); }
+    });
+
+    // 3) Horizontal cards — slower, more pronounced stagger
+    const cardGroups = [
+      { container: '.library-grid', card: '.lib-card', stagger: 320 },
+      { container: '.hint-grid',    card: '.hint-card', stagger: 320 },
+    ];
+    cardGroups.forEach(({ container, card, stagger }) => {
+      document.querySelectorAll(container).forEach((wrap) => {
+        wrap.querySelectorAll(card).forEach((el, i) => {
+          el.classList.add('reveal');
+          el.style.transitionDelay = (i * stagger) + 'ms';
+          items.push(el);
+        });
+      });
+    });
+
+    // 4) CTAs after each section
+    document.querySelectorAll('.intro > .cta, .scenes > .cta, .library > .cta, .hints > .cta').forEach((el) => {
+      el.classList.add('reveal');
+      items.push(el);
+    });
+
+    if (!('IntersectionObserver' in window)) {
+      items.forEach((el) => el.classList.add('is-in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    items.forEach((el) => io.observe(el));
+  })();
+
+  (function () {
+    const audio = new Audio();
+    let current = null;
+    let fadeTimer = null;
+    let baseVol = 1;
+    const FADE = 3.0; // seconds of fade-out at the tail
+
+    function cancelFade() { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } }
+
+    function stop(card) {
+      cancelFade();
+      audio.pause();
+      audio.volume = 1;
+      if (card) card.classList.remove('is-playing');
+    }
+
+    function fadeOutAndStop(card) {
+      cancelFade();
+      if (card) card.classList.remove('is-playing');
+      const startVol = audio.volume;
+      const t0 = Date.now();
+      const dur = 600; // ms manual fade
+      fadeTimer = setInterval(() => {
+        const k = Math.min(1, (Date.now() - t0) / dur);
+        audio.volume = Math.max(0, startVol * (1 - k));
+        if (k >= 1) { cancelFade(); audio.pause(); audio.volume = 1; }
+      }, 30);
+    }
+
+    document.querySelectorAll('.lib-card').forEach((card) => {
+      const fab = card.querySelector('.play-fab');
+      fab.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const src = card.getAttribute('data-audio');
+        if (current === card) {
+          fadeOutAndStop(card);
+          current = null;
+          return;
+        }
+        if (current) stop(current);
+        current = card;
+        card.classList.add('is-playing');
+        cancelFade();
+        baseVol = parseFloat(card.getAttribute('data-volume')) || 1;
+        audio.volume = baseVol;
+        if (src) { audio.src = src; audio.currentTime = 0; audio.play().catch(() => {}); }
+      });
+    });
+
+    // tail fade-out near the natural end
+    audio.addEventListener('timeupdate', () => {
+      if (!current || !isFinite(audio.duration)) return;
+      const remaining = audio.duration - audio.currentTime;
+      if (remaining <= FADE) {
+        const k = Math.max(0, remaining / FADE);
+        audio.volume = baseVol * k * k; // ease-out curve
+      } else if (audio.volume < baseVol) {
+        audio.volume = baseVol;
+      }
+    });
+    audio.addEventListener('ended', () => {
+      if (current) { current.classList.remove('is-playing'); current = null; }
+      audio.volume = 1;
+    });
+  })();
+
+  /* SP: align the tsunagari connector exactly between the first (朝の目覚めに)
+     and last (夕方帰り道で) scene images. */
+  (function alignScenePath() {
+    const list = document.querySelector('.scene-list');
+    const path = document.querySelector('.scene-path-sp');
+    if (!list || !path) return;
+    function update() {
+      if (getComputedStyle(path).display === 'none') {
+        path.style.top = '';
+        path.style.height = '';
+        return;
+      }
+      const medias = list.querySelectorAll('.scene .scene-media');
+      if (medias.length < 2) return;
+      const listTop = list.getBoundingClientRect().top;
+      const firstR = medias[0].getBoundingClientRect();
+      const lastR = medias[medias.length - 1].getBoundingClientRect();
+      // span between the vertical centers of the first and last scene images (shorter)
+      const top = (firstR.top + firstR.height / 2) - listTop;
+      const bottom = (lastR.top + lastR.height / 2) - listTop;
+      path.style.top = top + 'px';
+      path.style.height = Math.max(0, bottom - top) + 'px';
+    }
+    window.addEventListener('resize', update);
+    window.addEventListener('load', update);
+    update();
+  })();
+</script>
+
+<script src="assets/to-top.js"></script>
+</body>
+</html>
