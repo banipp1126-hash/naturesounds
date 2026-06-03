@@ -1388,31 +1388,56 @@
 
   (function () {
     const audio = new Audio();
+    audio.preload = 'auto';
     let current = null;
-    let fadeTimer = null;
     let baseVol = 1;
+    let tailing = false;
     const FADE = 3.0; // seconds of fade-out at the tail
 
-    function cancelFade() { if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; } }
+    // iOS ignores HTMLMediaElement.volume, so do all fades through a Web Audio
+    // GainNode. Falls back to .volume only where Web Audio is unavailable.
+    let ctx = null, gain = null, srcNode = null;
+    function ensureCtx() {
+      if (ctx !== null) return;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) { ctx = false; return; }
+      try {
+        ctx = new AC();
+        srcNode = ctx.createMediaElementSource(audio);
+        gain = ctx.createGain();
+        srcNode.connect(gain).connect(ctx.destination);
+        gain.gain.value = 1;
+      } catch (e) { ctx = false; }
+    }
+    function rampGain(target, seconds) {
+      const t = Math.max(0.0001, target);
+      if (ctx && gain) {
+        const now = ctx.currentTime;
+        gain.gain.cancelScheduledValues(now);
+        gain.gain.setValueAtTime(Math.max(0.0001, gain.gain.value), now);
+        gain.gain.linearRampToValueAtTime(t, now + Math.max(0.02, seconds));
+      } else {
+        audio.volume = Math.max(0, Math.min(1, target));
+      }
+    }
+    function setGainNow(v) {
+      if (ctx && gain) {
+        gain.gain.cancelScheduledValues(ctx.currentTime);
+        gain.gain.setValueAtTime(Math.max(0.0001, v), ctx.currentTime);
+      } else {
+        audio.volume = Math.max(0, Math.min(1, v));
+      }
+    }
 
     function stop(card) {
-      cancelFade();
       audio.pause();
-      audio.volume = 1;
       if (card) card.classList.remove('is-playing');
     }
 
     function fadeOutAndStop(card) {
-      cancelFade();
       if (card) card.classList.remove('is-playing');
-      const startVol = audio.volume;
-      const t0 = Date.now();
-      const dur = 600; // ms manual fade
-      fadeTimer = setInterval(() => {
-        const k = Math.min(1, (Date.now() - t0) / dur);
-        audio.volume = Math.max(0, startVol * (1 - k));
-        if (k >= 1) { cancelFade(); audio.pause(); audio.volume = 1; }
-      }, 30);
+      rampGain(0, 0.5);
+      setTimeout(() => { if (current === null) audio.pause(); }, 540);
     }
 
     document.querySelectorAll('.lib-card').forEach((card) => {
@@ -1426,29 +1451,34 @@
           return;
         }
         if (current) stop(current);
+        if (!src) { current = null; return; }
+        ensureCtx();
+        if (ctx && ctx.resume) { try { ctx.resume(); } catch (e) {} }
         current = card;
+        tailing = false;
         card.classList.add('is-playing');
-        cancelFade();
         baseVol = parseFloat(card.getAttribute('data-volume')) || 1;
-        audio.volume = baseVol;
-        if (src) { audio.src = src; audio.currentTime = 0; audio.play().catch(() => {}); }
+        audio.src = src;
+        audio.currentTime = 0;
+        setGainNow(0.0001);
+        const p = audio.play();
+        if (p && p.catch) p.catch(() => {});
+        rampGain(baseVol, 0.3); // short fade-in to avoid a start pop
       });
     });
 
-    // tail fade-out near the natural end
+    // tail fade-out near the natural end (single smooth ramp; iOS-safe via gain)
     audio.addEventListener('timeupdate', () => {
-      if (!current || !isFinite(audio.duration)) return;
+      if (!current || tailing || !isFinite(audio.duration)) return;
       const remaining = audio.duration - audio.currentTime;
       if (remaining <= FADE) {
-        const k = Math.max(0, remaining / FADE);
-        audio.volume = baseVol * k * k; // ease-out curve
-      } else if (audio.volume < baseVol) {
-        audio.volume = baseVol;
+        tailing = true;
+        rampGain(0, Math.max(0.1, remaining));
       }
     });
     audio.addEventListener('ended', () => {
       if (current) { current.classList.remove('is-playing'); current = null; }
-      audio.volume = 1;
+      tailing = false;
     });
   })();
 
