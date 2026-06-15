@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ねむのおと</title>
-<meta name="description" content="耳をすますと、自然の音が聴こえてくる。日常のなかで自然の音に耳を傾けるためのサイト「ねむのおと」。">
+<title>めぐりね</title>
+<meta name="description" content="耳をすますと、自然の音が聴こえてくる。日常のなかで自然の音に耳を傾けるためのサイト「めぐりね」。">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="ねむのおと">
+<meta property="og:site_name" content="めぐりね">
 <meta property="og:url" content="https://naturesounds.vercel.app/">
 <link rel="canonical" href="https://naturesounds.vercel.app/">
-<meta property="og:title" content="自然の音を楽しもう | ねむのおと">
-<meta property="og:description" content="耳をすますと、自然の音が聴こえてくる。日常のなかで自然の音に耳を傾けるためのサイト「ねむのおと」。">
+<meta property="og:title" content="自然の音を楽しもう | めぐりね">
+<meta property="og:description" content="耳をすますと、自然の音が聴こえてくる。日常のなかで自然の音に耳を傾けるためのサイト「めぐりね」。">
 <meta property="og:image" content="https://naturesounds.vercel.app/assets/ogp.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="自然の音を楽しもう | ねむのおと">
-<meta name="twitter:description" content="耳をすますと、自然の音が聴こえてくる。日常のなかで自然の音に耳を傾けるためのサイト「ねむのおと」。">
+<meta name="twitter:title" content="自然の音を楽しもう | めぐりね">
+<meta name="twitter:description" content="耳をすますと、自然の音が聴こえてくる。日常のなかで自然の音に耳を傾けるためのサイト「めぐりね」。">
 <meta name="twitter:image" content="https://naturesounds.vercel.app/assets/ogp.png">
 <template id="__bundler_thumbnail">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -80,7 +80,7 @@
   }
   .nav-brand img {
     position: absolute; left: 48px; top: 14px;
-    width: 81px; height: 53px;
+    width: 72px; height: 64px;
     display: block;
     pointer-events: auto;
   }
@@ -726,7 +726,7 @@
     display: flex; flex-direction: column; gap: 28px;
     align-items: flex-start;
   }
-  .footer .brand img { width: 77px; height: 70px; display: block; }
+  .footer .brand img { width: 79px; height: 70px; display: block; }
   .footer-nav { display: flex; gap: 36px; }
   .footer-nav a {
     font-family: "Zen Maru Gothic", sans-serif;
@@ -782,6 +782,45 @@
      Base rules above are the 1440 design; below makes it fluid.
      ============================================================ */
 
+  /* ── about-name box: 「めぐりね」とは？ ── */
+  .namebox-wrap {
+    width: 100%;
+    background: #fff;
+    padding: 48px 64px 104px;
+    display: flex; justify-content: center;
+  }
+  .namebox {
+    position: relative;
+    width: 100%; max-width: 1200px;
+    background: #F7FFF8;
+    border-radius: 24px;
+    padding: 68px 56px 76px;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+  }
+  .namebox-border { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .namebox-border rect {
+    x: 1.5px; y: 1.5px;
+    width: calc(100% - 3px); height: calc(100% - 3px);
+    rx: 22.5px; ry: 22.5px;
+    fill: none;
+    stroke: var(--green-primary); stroke-width: 3;
+    stroke-dasharray: 2 10; stroke-linecap: round;
+  }
+  .namebox > .section-heading,
+  .namebox > .namebox-body { position: relative; z-index: 1; }
+  .namebox-body .br-sp { display: none; }
+  .namebox .section-heading { margin-bottom: 30px; }
+  .namebox-body {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 2.3;
+    letter-spacing: 0.05em;
+    color: #4f5a52;
+    text-wrap: pretty;
+  }
+
   /* ── floating popup banner ── */
   .pop-banner {
     position: fixed; right: 30px; bottom: 112px; z-index: 80;
@@ -792,10 +831,14 @@
   }
   .pop-banner.is-shown { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
   .pop-banner.is-closed { display: none; }
-  .pop-banner__link { display: block; line-height: 0; filter: drop-shadow(0 10px 26px rgba(58,122,54,0.28)); }
-  .pop-banner__link img { width: 100%; height: auto; display: block; transition: filter .25s ease; }
+  .pop-banner__link { display: block; line-height: 0; }
+  .pop-banner__link img {
+    width: 100%; height: auto; display: block;
+    filter: drop-shadow(0 10px 22px rgba(58,122,54,0.26));
+    transition: filter .25s ease;
+  }
   @media (hover: hover) {
-    .pop-banner__link:hover img { filter: brightness(1.09) saturate(1.04); }
+    .pop-banner__link:hover img { filter: drop-shadow(0 10px 22px rgba(58,122,54,0.26)) brightness(1.09) saturate(1.04); }
   }
   .pop-banner__close {
     position: absolute; top: 8px; right: 10px; z-index: 1;
@@ -839,6 +882,8 @@
     .hints { padding: 80px 40px 64px; }
     .footer { padding: 48px 48px 32px; }
     .scenes { padding: 80px 48px 84px; }
+    .namebox-wrap { padding: 40px 48px 88px; }
+    .namebox { padding: 56px 40px 60px; }
 
     /* library 3 → 2 columns */
     .library-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 40px; justify-content: center; }
@@ -869,7 +914,14 @@
     p { font-size: 14px !important; }
     h2 { font-size: 28px !important; }
     /* SP: smaller floating popup banner, sits above the back-to-top button */
-    .pop-banner { width: 112px; right: 14px; bottom: 84px; }
+    .pop-banner { width: 138px; right: 12px; bottom: 84px; }
+    /* SP: about-name box */
+    .namebox-wrap { padding: 24px 16px 64px; }
+    .namebox { padding: 44px 22px 48px; border-radius: 18px; }
+    .namebox-border rect { rx: 16px; ry: 16px; stroke-width: 2; }
+    .namebox .section-heading { margin-bottom: 22px; }
+    .namebox-body { font-size: 15px; line-height: 2.05; }
+    .namebox-body .br-sp { display: inline; }
     .pop-banner__close { width: 26px; height: 26px; top: 2px; right: 2px; }
     .pop-banner__close svg { width: 14px; height: 14px; }
     /* sm nav: smaller logo, roomier tap targets */
@@ -879,8 +931,15 @@
     .nd-close { right: 22px; top: 24px; }
     .nd-list { gap: 26px; top: 112px; }
     .nd-list li { height: auto; }
-    .nd-list a { flex-wrap: wrap; gap: 4px 14px; }
-    .nd-list a .ttl { font-size: 20px; }
+    .nd-list a {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 14px; row-gap: 2px;
+      align-items: baseline;
+    }
+    .nd-list a .num { grid-column: 1; grid-row: 1; }
+    .nd-list a .ttl { grid-column: 2; grid-row: 1; font-size: 20px; }
+    .nd-list a .sub { grid-column: 2; grid-row: 2; }
 
     .intro { padding: 64px 22px; gap: 28px; }
     .library { padding: 64px 22px 48px; gap: 40px; }
@@ -1254,6 +1313,21 @@
   </section>
 </div>
 
+<!-- ABOUT NAME: 「めぐりね」とは？ -->
+<section class="namebox-wrap" id="about-name">
+  <div class="namebox">
+    <svg class="namebox-border" aria-hidden="true"><rect width="100%" height="100%"></rect></svg>
+    <div class="section-heading">
+      <h2 class="is-gradient">「めぐりね」とは？</h2>
+      <svg class="wave-mark"><use href="#wave-line"/></svg>
+    </div>
+    <p class="namebox-body">「めぐりね」は、<br class="br-sp">『偶然めぐり合う音』という意味です。<br>
+季節や天気、その日の気分によっても、<br class="br-sp">同じ音は二度とありません。<br>
+偶然出会える音の特別感に<br class="br-sp">気づくきっかけを作りたい。<br>
+そんな想いから、この名前をつけました。</p>
+  </div>
+</section>
+
 <!-- FLOATING POPUP BANNER -->
 <div class="pop-banner" id="popBanner">
   <button class="pop-banner__close" type="button" aria-label="バナーを閉じる">
@@ -1267,13 +1341,13 @@
 <!-- FOOTER -->
 <footer class="footer">
   <div class="brand">
-    <img src="assets/logo-footer.svg" alt="ねむのおと" width="77" height="70" />
+    <img src="assets/logo-footer.svg" alt="めぐりね" width="79" height="70" />
   </div>
   <nav class="footer-nav">
-    <a href="about.html">自然の音とは</a>
-    <a href="scenes.html">楽しむシーン</a>
+    <a href="about.html">自然の音を知る</a>
+    <a href="scenes.html">音を楽しむシーン</a>
     <a href="library.html">音ライブラリー</a>
-    <a href="tips.html">ヒント</a>
+    <a href="tips.html">音を楽しむヒント</a>
   </nav>
   <div class="footer-copy">© 2026 clanptoon</div>
 </footer>
