@@ -782,6 +782,37 @@
      Base rules above are the 1440 design; below makes it fluid.
      ============================================================ */
 
+  /* ── floating popup banner ── */
+  .pop-banner {
+    position: fixed; right: 30px; bottom: 112px; z-index: 80;
+    width: 168px;
+    opacity: 0; transform: translateY(24px) scale(0.92);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1);
+    pointer-events: none;
+  }
+  .pop-banner.is-shown { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+  .pop-banner.is-closed { display: none; }
+  .pop-banner__link { display: block; line-height: 0; filter: drop-shadow(0 10px 26px rgba(58,122,54,0.28)); }
+  .pop-banner__link img { width: 100%; height: auto; display: block; transition: filter .25s ease; }
+  @media (hover: hover) {
+    .pop-banner__link:hover img { filter: brightness(1.09) saturate(1.04); }
+  }
+  .pop-banner__close {
+    position: absolute; top: 8px; right: 10px; z-index: 1;
+    display: grid; place-items: center;
+    width: 30px; height: 30px; padding: 0; border-radius: 50%;
+    background: #fff; border: 2px solid #57B38A; color: #57B38A;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 4px 12px rgba(58,122,54,0.20);
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .pop-banner__close svg { width: 16px; height: 16px; display: block; }
+  .pop-banner__close:hover { background: #57B38A; color: #fff; transform: scale(1.06); }
+  @media (prefers-reduced-motion: reduce) {
+    .pop-banner { transition: opacity .3s ease; transform: none; }
+    .pop-banner.is-shown { transform: none; }
+  }
+
   /* fluid down to fit any width ≤1440 (covers lg 1280–1439 too) */
   @media (max-width: 1440px) {
     .intro, .library, .hints-wrap, .footer { width: 100%; }
@@ -837,6 +868,10 @@
     h3 { font-size: 22px !important; }
     p { font-size: 14px !important; }
     h2 { font-size: 28px !important; }
+    /* SP: smaller floating popup banner, sits above the back-to-top button */
+    .pop-banner { width: 112px; right: 14px; bottom: 84px; }
+    .pop-banner__close { width: 26px; height: 26px; top: 2px; right: 2px; }
+    .pop-banner__close svg { width: 14px; height: 14px; }
     /* sm nav: smaller logo, roomier tap targets */
     .nav-brand { transform: scale(0.64); transform-origin: top left; }
     .nav-drawer { height: 560px; }
@@ -1219,6 +1254,16 @@
   </section>
 </div>
 
+<!-- FLOATING POPUP BANNER -->
+<div class="pop-banner" id="popBanner">
+  <button class="pop-banner__close" type="button" aria-label="バナーを閉じる">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+  </button>
+  <a class="pop-banner__link" href="scenes.html#mood" aria-label="音診断チャートへ — 気分に合わせて音を選べる">
+    <img src="assets/pop.png" alt="1分でできる！気分に合わせて音を選べる 音診断チャート" />
+  </a>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="brand">
@@ -1234,6 +1279,30 @@
 </footer>
 
 <script>
+  // floating popup banner: fade in after a little scroll, dismissible via ×
+  (() => {
+    const pop = document.querySelector('.pop-banner');
+    if (!pop) return;
+    let closed = false;
+    const closeBtn = pop.querySelector('.pop-banner__close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closed = true;
+        pop.classList.remove('is-shown');
+        pop.classList.add('is-closed');
+      });
+    }
+    const onScroll = () => {
+      if (closed) return;
+      if (window.scrollY > 340) pop.classList.add('is-shown');
+      else pop.classList.remove('is-shown');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
