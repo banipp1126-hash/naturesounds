@@ -13,21 +13,8 @@
     + '.to-top__btn svg{display:block;width:52px;height:52px;'
     + 'filter:drop-shadow(0 8px 20px rgba(58,122,54,0.30));transition:transform .25s ease;}'
     + '.to-top__btn:hover svg{transform:translateY(-3px);}'
-    + '.to-top__label{position:absolute;right:52px;bottom:calc(100% + 14px);'
-    + 'display:flex;align-items:center;padding:10px 24px;border-radius:100px;'
-    + 'background:#fff;border:2px solid #57B38A;'
-    + 'font-family:"Zen Maru Gothic","Zen Kaku Gothic New",sans-serif;'
-    + 'font-weight:700;font-size:14px;letter-spacing:0.08em;color:#57B38A;white-space:nowrap;'
-    + 'box-shadow:0 6px 16px rgba(58,122,54,0.16);'
-    + 'opacity:0;transform:translateY(6px);pointer-events:none;'
-    + 'transition:opacity .25s ease,transform .25s ease;}'
-    + '.to-top__btn:hover + .to-top__label,.to-top:hover .to-top__label{opacity:1;transform:none;}'
-    + '.to-top__label::after,.to-top__label::before{content:"";position:absolute;'
-    + 'border-radius:50%;background:#fff;border:2px solid #57B38A;}'
-    + '.to-top__label::after{width:9px;height:9px;right:16px;bottom:-9px;}'
-    + '.to-top__label::before{width:5px;height:5px;right:7px;bottom:-18px;}'
     + '@media (max-width:860px){.to-top{right:20px;bottom:20px;}}'
-    + '@media (prefers-reduced-motion:reduce){.to-top,.to-top__btn svg,.to-top__label{transition:none;}}';
+    + '@media (prefers-reduced-motion:reduce){.to-top,.to-top__btn svg{transition:none;}}';
 
   var style = document.createElement('style');
   style.textContent = css;
@@ -44,8 +31,7 @@
     var wrap = document.createElement('div');
     wrap.className = 'to-top';
     wrap.innerHTML =
-      '<button class="to-top__btn" type="button" aria-label="ページ上部に戻る">' + svg + '</button>'
-      + '<span class="to-top__label">上に戻る</span>';
+      '<button class="to-top__btn" type="button" aria-label="ページ上部に戻る">' + svg + '</button>';
     document.body.appendChild(wrap);
 
     wrap.querySelector('.to-top__btn').addEventListener('click', function () {
