@@ -1513,6 +1513,11 @@
       items.push(el);
     });
 
+    // 5) any standalone .reveal elements not already collected (e.g. about-name box)
+    document.querySelectorAll('.reveal').forEach((el) => {
+      if (!items.includes(el)) items.push(el);
+    });
+
     if (!('IntersectionObserver' in window)) {
       items.forEach((el) => el.classList.add('is-in'));
       return;
@@ -1526,6 +1531,15 @@
       });
     }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
     items.forEach((el) => io.observe(el));
+
+    // safety: immediately reveal anything already within the viewport on load
+    requestAnimationFrame(() => {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      items.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh && r.bottom > 0) { el.classList.add('is-in'); io.unobserve(el); }
+      });
+    });
   })();
 
   (function () {
