@@ -734,8 +734,15 @@
     .nd-close { right: 22px; top: 24px; }
     .nd-list { gap: 26px; top: 112px; }
     .nd-list li { height: auto; }
-    .nd-list a { flex-wrap: wrap; gap: 4px 14px; }
-    .nd-list a .ttl { font-size: 20px; }
+    .nd-list a {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 14px; row-gap: 2px;
+      align-items: baseline;
+    }
+    .nd-list a .num { grid-column: 1; grid-row: 1; }
+    .nd-list a .ttl { grid-column: 2; grid-row: 1; font-size: 20px; }
+    .nd-list a .sub { grid-column: 2; grid-row: 2; }
 
     .page-hero { height: 300px; }
     .page-hero .bg { background-image: url("assets/sp-about-mv.png"); background-position: center; }
@@ -838,8 +845,8 @@
   <div class="nd-bar"></div>
   <ul class="nd-list">
     <li><a href="about.html" data-close><span class="num">01</span><span class="ttl">自然の音を知る</span><span class="sub">ABOUT NATURAL SOUNDS</span></a></li>
-    <li><a href="scenes.html" data-close><span class="num">02</span><span class="ttl">音を楽しむシーン</span><span class="sub">SCEANS</span></a></li>
-    <li><a href="library.html" data-close><span class="num">03</span><span class="ttl">音ライブラリー</span><span class="sub">SOUNDS LIBLARY</span></a></li>
+    <li><a href="scenes.html" data-close><span class="num">02</span><span class="ttl">音を楽しむシーン</span><span class="sub">SCENES</span></a></li>
+    <li><a href="library.html" data-close><span class="num">03</span><span class="ttl">音ライブラリー</span><span class="sub">SOUND LIBRARY</span></a></li>
     <li><a href="tips.html" data-close><span class="num">04</span><span class="ttl">音を楽しむヒント</span><span class="sub">TIPS</span></a></li>
   </ul>
   <button class="nd-close" data-close aria-label="メニューを閉じる"></button>
