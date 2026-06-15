@@ -167,10 +167,11 @@
   .nd-close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
 
   /* ───── BREADCRUMB (below MV) ───── */
+  .br-sp { display: none; }
   .breadcrumb {
     width: 100%;
     padding: 20px 120px;
-    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-family: "Zen Maru Gothic", sans-serif;
     font-size: 12px; letter-spacing: 0.08em; color: var(--ink);
     background: #EDFFF0;
   }
@@ -688,6 +689,8 @@
 
   /* ── sm : 320–767 ── */
   @media (max-width: 767px) {
+    /* SP-only line break helper */
+    .br-sp { display: inline; }
     /* SP: unify h3 heading size */
     h3 { font-size: 22px !important; }
     p { font-size: 14px !important; }
@@ -819,7 +822,7 @@
     <div class="cat-intro">
       <h2>水の音</h2>
       <span class="cat-underline"></span>
-      <p>川のせせらぎ、雨だれ、波の寄せ返し。 リラックスを誘う、自然音の代表格。</p>
+      <p>川のせせらぎ、雨だれ、波の寄せ返し。<br class="br-sp">リラックスを誘う、自然音の代表格。</p>
     </div>
     <div class="sub-group">
       <div class="sub-head"><span class="jp" style="color: rgb(87, 179, 138)">川</span><span class="en">RIVER</span></div>
@@ -915,7 +918,7 @@
     <div class="cat-intro">
       <h2>生き物の声</h2>
       <span class="cat-underline"></span>
-      <p>朝のさえずり、夕の虫の声。 季節の移ろいを教えてくれる、ちいさな声。</p>
+      <p>朝のさえずり、夕の虫の声。<br class="br-sp">季節の移ろいを教えてくれる、ちいさな声。</p>
     </div>
     <div class="sub-group">
       <div class="sub-head"><span class="jp" style="color: rgb(87, 179, 138)">鳥</span><span class="en">BIRDS</span></div>
@@ -987,7 +990,7 @@
     <div class="cat-intro">
       <h2>植物・風の音</h2>
       <span class="cat-underline"></span>
-      <p>葉ずれ、木々のきしみ、風のうなり。 繊細な響きに耳を澄ませて。</p>
+      <p>葉ずれ、木々のきしみ、風のうなり。<br class="br-sp">繊細な響きに耳を澄ませて。</p>
     </div>
     <div class="sub-group">
       <div class="sub-head"><span class="jp" style="color: rgb(87, 179, 138)">植物</span><span class="en">PLANTS</span></div>
@@ -1063,7 +1066,7 @@
     <div class="section-heading">
       <h2>次のアクションへ</h2>
       <span class="wave-mark"></span>
-      <p class="lede">聴いてみたい音は見つかりましたか。次は使い方を広げてみましょう。</p>
+      <p class="lede">聴いてみたい音は見つかりましたか。<br class="br-sp">次は使い方を広げてみましょう。</p>
     </div>
     <div class="cta-grid">
       <a class="cta-card know" href="about.html">

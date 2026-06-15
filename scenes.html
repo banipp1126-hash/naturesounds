@@ -167,10 +167,11 @@
   .nd-close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
 
   /* ───── BREADCRUMB (below MV) ───── */
+  .br-sp { display: none; }
   .breadcrumb {
     width: 100%;
     padding: 20px 120px;
-    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-family: "Zen Maru Gothic", sans-serif;
     font-size: 12px; letter-spacing: 0.08em; color: var(--ink);
     background: #EDFFF0;
   }
@@ -579,6 +580,8 @@
   }
 
   @media (max-width: 767px) {
+    /* SP-only line break helper */
+    .br-sp { display: inline; }
     /* SP: unify h3 heading size */
     h3 { font-size: 22px !important; }
     p { font-size: 14px !important; }
@@ -743,7 +746,7 @@
   <div class="section-heading">
     <h2>一日の流れに沿って</h2>
     <span class="wave-mark"></span>
-    <p class="lede">朝から夜まで。5つの場面に、それぞれちょうどよい自然の音があります。</p>
+    <p class="lede">朝から夜まで。5つのシーンに、<br class="br-sp">それぞれちょうどよい自然の音があります。</p>
   </div>
 
   <div class="timeline">
@@ -840,8 +843,8 @@
   <div class="section-heading">
     <h2>こんな気分のときに</h2>
     <span class="wave-mark"></span>
-    <p class="lede">時間帯だけでなく、その日の気分から選ぶのもひとつの方法。
-診断に答えるだけで、ぴったりのシーンが浮かびあがります。</p>
+    <p class="lede">時間帯だけでなく、<br class="br-sp">その日の気分から選ぶのもひとつの方法。
+診断に答えるだけで、<br class="br-sp">ぴったりのシーンが浮かびあがります。</p>
   </div>
   <div class="flowchart-wrap reveal">
     <img class="flowchart-pc" src="assets/flowchart.png" alt="気分から選ぶ診断チャート" />
@@ -855,7 +858,7 @@
     <div class="section-heading">
       <h2>次のアクションへ</h2>
       <span class="wave-mark"></span>
-      <p class="lede">シーンが見つかったら、実際の音にふれてみましょう。</p>
+      <p class="lede">シーンが見つかったら、<br class="br-sp">実際の音にふれてみましょう。</p>
     </div>
     <div class="cta-grid">
       <a class="cta-card lib" href="library.html">

@@ -166,10 +166,11 @@
   .nd-close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
 
   /* ───── BREADCRUMB (below MV) ───── */
+  .br-sp { display: none; }
   .breadcrumb {
     width: 100%;
     padding: 20px 120px;
-    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-family: "Zen Maru Gothic", sans-serif;
     font-size: 12px; letter-spacing: 0.08em; color: var(--ink);
     background: #EDFFF0;
   }
@@ -742,6 +743,8 @@
   }
 
   @media (max-width: 767px) {
+    /* SP-only line break helper */
+    .br-sp { display: inline; }
     /* SP: unify h3 heading size */
     h3 { font-size: 22px !important; }
     p { font-size: 14px !important; }
@@ -898,7 +901,7 @@
     <h2>すぐに試せるヒント</h2>
     <span class="wave-mark"></span>
     <p class="lede">少しだけ、耳の使い方を変えてみる。
-特別な道具も場所も要りません。手軽な順に4つ、並べました。</p>
+特別な道具も場所も要りません。<br class="br-sp">手軽な順に4つ、並べました。</p>
   </div>
   <div class="starter-timeline">
     <img class="starter-path" src="assets/hint-tsunagari01.png" alt="" />
@@ -970,7 +973,7 @@
       <article class="deep-card">
         <span class="deep-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4l6 6L12 26l-7 2 2-7z"/><line x1="19" y1="7" x2="25" y2="13"/></svg></span>
         <h3>音の変化を<br>日記に書く</h3>
-        <p>その日聴こえた音を3行だけ書きとめる。時間と場所だけでも十分。1ヶ月続けると、季節が変わった瞬間が言葉でくっきり浮かびます。</p>
+        <p>その日聴こえた音を3行だけ書きとめる。時間と場所だけでも十分。<br class="br-sp">1ヶ月続けると、季節が変わった瞬間が言葉でくっきり浮かびます。</p>
       </article>
       <article class="deep-card">
         <span class="deep-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="4"/><circle cx="22" cy="13" r="3.4"/><path d="M4 27c0-4 3-7 7-7s7 3 7 7"/><path d="M19 21c3 0 8 1 8 6"/></svg></span>
@@ -1028,7 +1031,7 @@
     <div class="section-heading">
       <h2>次のアクションへ</h2>
       <span class="wave-mark"></span>
-      <p class="lede">ヒントを携えて、実際に音と出会いに行きましょう。</p>
+      <p class="lede">ヒントを携えて、<br class="br-sp">実際に音と出会いに行きましょう。</p>
     </div>
     <div class="cta-grid">
       <a class="cta-card lib" href="library.html">
